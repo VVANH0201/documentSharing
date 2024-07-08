@@ -1,0 +1,483 @@
+
+<%- include('partials/head.ejs') %>
+<!-- Layout wrapper -->
+<div class=" container-xxl flex-grow-1 container-p-y">
+    <%- include('partials/header.ejs') %>
+    <div class="content-wrapper">
+            <!-- Content -->
+        <div class="">
+            <div class="d-flex ">
+              <div class="m-3">
+                <%- include('partials/sidebar.ejs') %>
+              </div>
+              <div class="mt-3 col-md-8" >
+                <nav aria-label="breadcrumb">
+                  <ol class="breadcrumb breadcrumb-style1">
+                    <li class="breadcrumb-item">
+                      <a href="/home">Trang chủ</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                      <span href="/home">Danh mục</span>
+                    </li>
+                    <li class="breadcrumb-item">
+                      <a href="/types/<%= type.id %>"> <%= type.name %></a>
+                    </li>
+                   
+                  </ol>
+                </nav>
+                <input type="text" value="<%= type.id %>" hidden id="type_id">
+                <div class="title1 d-flex justify-content-between">
+                  <span class="">Tài liệu</span>
+                  <div style="font-size: 16px; ">
+                      <span style="cursor: pointer;" onclick="load()">Mới nhất</span>
+                      <span>|</span>
+                      <span style="cursor: pointer;" onclick="load1()">Nổi bật</span>
+                  </div>
+                  <!-- <select id="defaultSelect" class="form-select " style="width: 30px;">
+              
+                      <option value="view_count">Mới nhất</option>
+                      <option value="like_count">Nổi bật</option>
+                      
+                    </select> -->
+              </div>
+                <div id="list_document" class="row mt-3">
+
+                </div>
+                <div class="d-flex justify-content-center">
+                    <input type="text" hidden id="num">
+                    <h5 id="text_more" class="mt-5" onclick="more()" style="display: none; cursor: pointer;">Xem thêm</h5>
+                    <input type="text" hidden id="num1">
+                    <h5 id="text_more1" class="mt-5" onclick="more1()" style="display: none; cursor: pointer;">Xem thêm</h5>
+                </div>
+              </div>
+            </div>
+           
+            
+        </div>
+    </div>      
+          
+</div>            
+<%- include('partials/footer.ejs') %>
+<script>
+    
+//     function load(){
+//         const type_id = document.getElementById("type_id").value;
+//         const num_ip = document.getElementById("num");
+        
+//                 console.log(type_id);
+//         const text_more = document.getElementById("text_more");
+//         const text_more1 = document.getElementById("text_more1");
+//         text_more1.style.display = 'none';
+//         $.ajax({
+//         type: "GET",
+//         url: `http://localhost:8001/api/v1/documents/getbytype?id=${type_id}&limit=10&vt=new`,
+        
+//         success: function (response) {
+//            console.log(response);
+//            $('#list_document').empty();
+//            let num = response.data.length;
+//            console.log(num);
+//            num_ip.setAttribute("value", num);
+//             for (const document of response.data) {
+
+//                 let str = `
+//                 <div >
+//                   <div class="card mb-3">
+                  
+                    
+//                     <div class="row g-0 d-flex">
+//                       <div class="col-md-2" style = "text-align: center;">
+//                         <img class="card-custom-img" id="pdfImage1${document.id}" alt="PDF to Image">
+//                       </div>
+//                       <div class="col-md-10">
+//                         <div class ="">
+//                       <a href="/document/view/${document.id}" style=" cursor: pointer; ">
+//                       <h5 style="color:rgb(124, 199, 245) ; margin-bottom: 0; padding: 5px;" >${document.title}</h5>
+//                     </a>
+//                     </div >
+//                         <div style="text-align: justify; padding:5px;" >
+                          
+//                             <span >${document.describes}</span>
+                         
+//                           <br>
+//                           <a href="/user/${document.user_id}">${document.full_name}</a>
+//                             <div class="d-flex align-items-center m-2" >
+//                                 <div class="d-flex align-items-center" style="margin-right: 10px;">
+//                                     <i class='bx bx-heart'></i>
+//                                     <div class="text-muted">${document.like_count}</div>
+//                                 </div>
+//                                 <div class="d-flex align-items-center" style="margin-right: 10px;">
+//                                     <i class='bx bxs-download' ></i>
+//                                     <div class="text-muted">${document.download_count}</div>
+//                                 </div> 
+//                                 <div class="d-flex align-items-center" style="margin-right: 10px;">
+//                                     <i class='bx bx-show'></i>
+//                                     <div class="text-muted">${document.view_count}</div>
+//                                 </div>
+//                                 <div class="d-flex align-items-center" style="margin-right: 10px;">
+//                                     <i class='bx bxs-calendar'></i>
+//                                     <div class="text-muted">${countTime(document.created_at)}</div>
+//                                 </div>
+//                             </div>
+
+//                             <div class="d-flex align-items-center justify-content-between m-2">
+                                
+//                             </div>
+//                         </div>
+//                       </div>
+//                     </div>
+//                   </div>
+//                 </div>
+//                 `;
+//                 $('#list_document').append(str);
+//                 //$('.text_more').append("Xem them");
+//                 text_more.style.display = 'block';
+//             }
+//             for (const document of response.data) {
+//                   displayFirstPage(document.link, "pdfImage1"+document.id);
+//                 }    
+//           },
+//         error: function (error) {
+//             console.log(error);
+//         },
+
+//     });
+// }
+// function load1(){
+//         const type_id = document.getElementById("type_id").value;
+//         const num_ip = document.getElementById("num1");
+        
+//                 console.log(type_id);
+//         const text_more = document.getElementById("text_more");
+//         const text_more1 = document.getElementById("text_more1");
+//         text_more.style.display = 'none';
+//         $.ajax({
+//         type: "GET",
+//         url: `http://localhost:8001/api/v1/documents/getbytype?id=${type_id}&limit=10&vt=view`,
+        
+//         success: function (response) {
+//            console.log(response);
+//            $('#list_document').empty();
+//            let num = response.data.length;
+//            console.log(num);
+//            num_ip.setAttribute("value", num);
+//             for (const document of response.data) {
+
+//                 let str = `
+//                 <div >
+//                   <div class="card mb-3">
+                  
+                    
+//                     <div class="row g-0 d-flex">
+//                       <div class="col-md-2" style = "text-align: center;">
+//                         <img class="card-custom-img" id="pdfImage1${document.id}" alt="PDF to Image">
+//                       </div>
+//                       <div class="col-md-10">
+//                         <div class ="">
+//                       <a href="/document/view/${document.id}" style=" cursor: pointer; ">
+//                       <h5 style="color:rgb(124, 199, 245) ; margin-bottom: 0; padding: 5px;" >${document.title}</h5>
+//                     </a>
+//                     </div >
+//                         <div style="text-align: justify; padding:5px;" >
+                          
+//                             <span >${document.describes}</span>
+                         
+//                           <br>
+//                           <a href="/user/${document.user_id}">${document.full_name}</a>
+//                             <div class="d-flex align-items-center m-2" >
+//                                 <div class="d-flex align-items-center" style="margin-right: 10px;">
+//                                     <i class='bx bx-heart'></i>
+//                                     <div class="text-muted">${document.like_count}</div>
+//                                 </div>
+//                                 <div class="d-flex align-items-center" style="margin-right: 10px;">
+//                                     <i class='bx bxs-download' ></i>
+//                                     <div class="text-muted">${document.download_count}</div>
+//                                 </div> 
+//                                 <div class="d-flex align-items-center" style="margin-right: 10px;">
+//                                     <i class='bx bx-show'></i>
+//                                     <div class="text-muted">${document.view_count}</div>
+//                                 </div>
+//                                 <div class="d-flex align-items-center" style="margin-right: 10px;">
+//                                     <i class='bx bxs-calendar'></i>
+//                                     <div class="text-muted">${countTime(document.created_at)}</div>
+//                                 </div>
+//                             </div>
+
+//                             <div class="d-flex align-items-center justify-content-between m-2">
+                                
+//                             </div>
+//                         </div>
+//                       </div>
+//                     </div>
+//                   </div>
+//                 </div>
+//                 `;
+//                 $('#list_document').append(str);
+//                 //$('.text_more').append("Xem them");
+//                 text_more1.style.display = 'block';
+//             }
+//             for (const document of response.data) {
+//                   displayFirstPage(document.link, "pdfImage1"+document.id);
+//                 }    
+//           },
+//         error: function (error) {
+//             console.log(error);
+//         },
+
+//     });
+//   }
+// load();
+// function more() {
+//     const type_id = document.getElementById("type_id").value;
+//         let num_ip = document.getElementById("num");
+//         let num_ip_new = document.getElementById("num").value;
+//         num_ip_new = Number(num_ip_new)+5;
+//         console.log(num_ip_new);
+//         const text_more = document.getElementById("text_more");
+//         $.ajax({
+//         type: "GET",
+//         url: `http://localhost:8001/api/v1/documents/getbytype?id=${type_id}&limit=${num_ip_new}&vt=new`,
+        
+//         success: function (response) {
+//            console.log(response);
+//            $('#list_document').empty();
+//            let num = response.data.length;
+//            console.log(num);
+//            num_ip.setAttribute("value", num);
+//             for (const document of response.data) {
+
+//                 let str = `
+//                 <div >
+//                   <div class="card mb-3">
+                  
+                    
+//                     <div class="row g-0 d-flex">
+//                       <div class="col-md-2" style = "text-align: center;">
+//                         <img class="card-custom-img" id="pdfImage1${document.id}" alt="PDF to Image">
+//                       </div>
+//                       <div class="col-md-10">
+//                         <div class ="">
+//                       <a href="/document/view/${document.id}" style=" cursor: pointer; ">
+//                       <h5 style="color:rgb(124, 199, 245) ; margin-bottom: 0; padding: 5px;" >${document.title}</h5>
+//                     </a>
+//                     </div >
+//                         <div style="text-align: justify; padding:5px;" >
+                          
+//                             <span >${document.describes}</span>
+                         
+//                           <br>
+//                           <a href="/user/${document.user_id}">${document.full_name}</a>
+//                             <div class="d-flex align-items-center m-2" >
+//                                 <div class="d-flex align-items-center" style="margin-right: 10px;">
+//                                     <i class='bx bx-heart'></i>
+//                                     <div class="text-muted">${document.like_count}</div>
+//                                 </div>
+//                                 <div class="d-flex align-items-center" style="margin-right: 10px;">
+//                                     <i class='bx bxs-download' ></i>
+//                                     <div class="text-muted">${document.download_count}</div>
+//                                 </div> 
+//                                 <div class="d-flex align-items-center" style="margin-right: 10px;">
+//                                     <i class='bx bx-show'></i>
+//                                     <div class="text-muted">${document.view_count}</div>
+//                                 </div>
+//                                 <div class="d-flex align-items-center" style="margin-right: 10px;">
+//                                     <i class='bx bxs-calendar'></i>
+//                                     <div class="text-muted">${countTime(document.created_at)}</div>
+//                                 </div>
+//                             </div>
+
+//                             <div class="d-flex align-items-center justify-content-between m-2">
+                                
+//                             </div>
+//                         </div>
+//                       </div>
+//                     </div>
+//                   </div>
+//                 </div>
+//                 `;
+//                 $('#list_document').append(str);
+//                 //$('.text_more').append("Xem them");
+//                 text_more.style.display = 'block';
+//             }
+//             for (const document of response.data) {
+//                   displayFirstPage(document.link, "pdfImage1"+document.id);
+//                 }  
+//         },
+//         error: function (error) {
+//             console.log(error);
+//         },
+
+//     });
+// }
+// function more1() {
+//     const type_id = document.getElementById("type_id").value;
+//         let num_ip = document.getElementById("num1");
+//         let num_ip_new = document.getElementById("num1").value;
+//         num_ip_new = Number(num_ip_new)+5;
+//         console.log(num_ip_new);
+//         const text_more = document.getElementById("text_more1");
+//         $.ajax({
+//         type: "GET",
+//         url: `http://localhost:8001/api/v1/documents/getbytype?id=${type_id}&limit=${num_ip_new}&vt=view`,
+        
+//         success: function (response) {
+//            console.log(response);
+//            $('#list_document').empty();
+//            let num = response.data.length;
+//            console.log(num);
+//            num_ip.setAttribute("value", num);
+//             for (const document of response.data) {
+
+//                 let str = `
+//                 <div >
+//                   <div class="card mb-3">
+                  
+                    
+//                     <div class="row g-0 d-flex">
+//                       <div class="col-md-2" style = "text-align: center;">
+//                         <img class="card-custom-img" id="pdfImage1${document.id}" alt="PDF to Image">
+//                       </div>
+//                       <div class="col-md-10">
+//                         <div class ="">
+//                       <a href="/document/view/${document.id}" style=" cursor: pointer; ">
+//                       <h5 style="color:rgb(124, 199, 245) ; margin-bottom: 0; padding: 5px;" >${document.title}</h5>
+//                     </a>
+//                     </div >
+//                         <div style="text-align: justify; padding:5px;" >
+                          
+//                             <span >${document.describes}</span>
+                         
+//                           <br>
+//                           <a href="/user/${document.user_id}">${document.full_name}</a>
+//                             <div class="d-flex align-items-center m-2" >
+//                                 <div class="d-flex align-items-center" style="margin-right: 10px;">
+//                                     <i class='bx bx-heart'></i>
+//                                     <div class="text-muted">${document.like_count}</div>
+//                                 </div>
+//                                 <div class="d-flex align-items-center" style="margin-right: 10px;">
+//                                     <i class='bx bxs-download' ></i>
+//                                     <div class="text-muted">${document.download_count}</div>
+//                                 </div> 
+//                                 <div class="d-flex align-items-center" style="margin-right: 10px;">
+//                                     <i class='bx bx-show'></i>
+//                                     <div class="text-muted">${document.view_count}</div>
+//                                 </div>
+//                                 <div class="d-flex align-items-center" style="margin-right: 10px;">
+//                                     <i class='bx bxs-calendar'></i>
+//                                     <div class="text-muted">${countTime(document.created_at)}</div>
+//                                 </div>
+//                             </div>
+
+//                             <div class="d-flex align-items-center justify-content-between m-2">
+                                
+//                             </div>
+//                         </div>
+//                       </div>
+//                     </div>
+//                   </div>
+//                 </div>
+//                 `;
+//                 $('#list_document').append(str);
+//                 //$('.text_more').append("Xem them");
+//                 text_more.style.display = 'block';
+//             }
+//             for (const document of response.data) {
+//                   displayFirstPage(document.link, "pdfImage1"+document.id);
+//                 }  
+//         },
+//         error: function (error) {
+//             console.log(error);
+//         },
+
+//     });
+// }
+// function countTime(created_at_string) {
+//     let created_at = new Date(created_at_string);
+//     let now = new Date();
+
+//     let timeDifference = now - created_at; // Khoảng thời gian ở dạng miligisecond
+
+//     let minutesDifference = Math.floor(timeDifference / (1000 * 60)); // Chuyển đổi sang phút
+//     let hoursDifference = Math.floor(timeDifference / (1000 * 60 * 60)); // Chuyển đổi sang giờ
+//     let daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24)); // Chuyển đổi sang ngày
+
+//     let result;
+
+//     if (daysDifference > 0) {
+//         result = daysDifference + (daysDifference === 1 ? " ngày trước" : " ngày trước");
+//     } else if (hoursDifference > 0) {
+//         result = hoursDifference + (hoursDifference === 1 ? " giờ trước" : " giờ trước");
+//     } else {
+//         result = minutesDifference + (minutesDifference === 1 ? " phút trước" : " phút trước");
+//     }
+
+//     return result;
+// }
+// function shortenHtmlText(htmlText, maxLength) {
+//   let tempElement = document.createElement('div');
+//   tempElement.innerHTML = htmlText;
+
+//   let text = tempElement.textContent || tempElement.innerText || '';
+
+//   if (text.length <= maxLength) {
+//     return htmlText;
+//   } else {
+//     let shortText = text.substring(0, maxLength - 3) + "...";
+//     tempElement.textContent = shortText;
+//     return tempElement.innerHTML;
+//   }
+// }
+// function shortenTextByWords(text, maxWords) {
+//   // Tách văn bản thành các từ dựa trên khoảng trắng
+//   let words = text.split(/\s+/);
+  
+//   // Nếu số từ ít hơn hoặc bằng số từ tối đa, trả về văn bản gốc
+//   if (words.length <= maxWords) {
+//     return text;
+//   }
+
+//   // Lấy 50 từ đầu tiên và thêm dấu ba chấm
+//   let shortenedText = words.slice(0, maxWords).join(' ') + '...';
+
+//   return shortenedText;
+// }
+// function displayFirstPage(pdfFilePath, imgId) {
+//   const pdfUrl = 'http://localhost:8001/img/' + pdfFilePath;
+//             const img = document.getElementById(imgId);
+
+//             // Khởi tạo PDFJS
+//             pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
+//                 // Lấy trang đầu tiên
+//                 pdf.getPage(1).then(page => {
+//                     const scale = 1.5;
+//                     const viewport = page.getViewport({ scale });
+
+//                     // Tạo canvas để vẽ trang PDF
+//                     const canvas = document.createElement('canvas');
+//                     const context = canvas.getContext('2d');
+//                     canvas.height = viewport.height;
+//                     canvas.width = viewport.width;
+                   
+
+//                     // Vẽ trang PDF lên canvas
+//                     page.render({
+//                         canvasContext: context,
+//                         viewport: viewport
+//                     }).promise.then(() => {
+//                         // Chuyển đổi canvas thành ảnh và hiển thị trong thẻ img
+//                         const imgData = canvas.toDataURL('image/jpeg');
+                        
+//                           img.src = imgData;
+                        
+                       
+                          
+                        
+                        
+//                     });
+//                 });
+//             }).catch(error => {
+//               img.src = "http://localhost:8001/asset/img/document.jpg";
+// });
+//         }
+</script>
+<script src="/asset/js/script/types.js"></script>

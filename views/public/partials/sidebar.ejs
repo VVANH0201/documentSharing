@@ -1,0 +1,83 @@
+<aside class=" menu-vertical menu bg-menu-theme" data-bg-class="bg-menu-theme">
+
+      <!-- Components -->
+    <li class="menu-header small text-uppercase"><span class="menu-header-text">DANH MỤC TÀI LIỆU</span></li>
+      <!-- Cards -->
+    <div id="menu-container"></div>
+    <div class="ps__rail-x" style="left: 0px; bottom: -256px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 256px; height: 330px; right: 4px;"><div class="ps__thumb-y" tabindex="0" style="top: 85px; height: 110px;"></div></div></ul>
+</aside>
+<script>
+async function fetchParentCategories() {
+    try {
+        const response = await fetch('http://localhost:8001/api/v1/types');
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        const data = await response.json();
+        console.log(data);
+        return data.data;  // Assuming `data` has a `data` property which is an array
+    } catch (error) {
+        console.error('Failed to fetch parent categories:', error);
+        return [];  // Return an empty array on error
+    }
+}
+async function fetchChildCategories(parentId) {
+    try {
+        const response = await fetch(`http://localhost:8001/api/v1/types/children/${parentId}`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        const data = await response.json();
+        console.log(data);
+        return data.data;  // Assuming `data` has a `data` property which is an array
+    } catch (error) {
+        console.error('Failed to fetch parent categories:', error);
+        return [];  // Return an empty array on error
+    }
+}
+        function createMenu(categories, parentElement) {
+            const ul = document.createElement('ul');
+
+categories.forEach( async category => {
+    const li = document.createElement('li');
+    const childCategories = await fetchChildCategories(category.id);
+    // if (childCategories.length) {
+    //     // Đây là danh mục cha
+    //     li.textContent = category.name;
+    //     li.addEventListener('click', async () => {
+    //         if (li.children.length === 0) {
+    //             const childCategories = await fetchChildCategories(category.id);
+    //             if (childCategories.length > 0) {
+    //                 createMenu(childCategories, li);
+    //             }
+    //         } else {
+    //             const childUl = li.querySelector('ul');
+    //             if (childUl) {
+    //                 childUl.style.display = childUl.style.display === 'none' ? 'block' : 'none';
+    //             }
+    //         }
+    //     });
+    // } else {
+        // Đây là danh mục con
+        const a = document.createElement('a');
+        a.textContent = category.name;
+        a.href = `/types/${category.id}`;  // Thay đổi URL tới trang thích hợp
+        li.appendChild(a);
+    // }
+
+    ul.appendChild(li);
+});
+
+parentElement.appendChild(ul);
+
+        }
+
+        async function loadMenu() {
+            const menuContainer = document.getElementById('menu-container');
+            const parentCategories = await fetchParentCategories();
+            console.log(parentCategories);
+            createMenu(parentCategories, menuContainer);
+        }
+
+        loadMenu();        
+</script>

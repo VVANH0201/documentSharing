@@ -1,0 +1,119 @@
+
+<%- include('partials/head.ejs') %>
+<!-- Layout wrapper -->
+<div class="container-fluid">
+    <%- include('partials/header.ejs') %>
+    <div class="content-wrapper">
+            <!-- Content -->
+        <div class="container-xxl flex-grow-1 container-p-y">
+                <div class="row">
+                    <div class="col-xl-12">
+                      <div class="nav-align-top mb-4">
+                        
+                        <div class="row">
+                            <div class="d-flex justify-content-center">
+                                <div class="card col-lg-6 col-md-6">
+                                    <% if(check ==true){ %>
+                                        <div class="card-header d-flex align-items-center justify-content-between">
+                                       
+                                            <h5 class="card-title m-0 me-2">Thông báo( <%= num %>)</h5>
+                                            
+                                        </div>
+                                        <div class="p-3">
+                                            <% data.forEach(entry => { %>
+                                                <li class="d-flex mb-4 pb-1 justify-content-between gap-2 mt-2">
+                                                    <div class="d-flex mb-2 ">
+                                                        <div class="avatar flex-shrink-0 me-3">
+                                                            <img src="/img/<%= entry.avatar_url %>"  alt="User" class="rounded">
+                                                          </div>
+                                                        <div class="flex-grow-1 row">
+                                                          <div class="col-md-12 mb-sm-0 d-flex">
+                                                            <a href = "<%= entry.link %>" class="mb-0" onclick="update_noti('<%= entry.id %>')">
+                                                               <p style="font-size: 12px;"><%= entry.content %></p>
+                                                            </a>
+                                                           
+                                                          </div>
+                                                          <small style="font-size: 12px;" class="text-muted"><%= moment(entry.created_at).format('DD/MM/YYYY'); %></small>
+                                                          
+                                                        </div>
+                                                    </div>
+                                                    <% if(entry.is_active == 1) {%>
+                                                        <div>
+                                                            <span class="badge rounded-pill badge-center h-px-20 w-px-20 bg-danger"><i class='bx bx-radio-circle'></i></span>
+                                                        </div>
+                                                    <% }else{ %>
+                                                        <div>
+                                                            
+                                                        </div>
+                                                    <% } %>        
+                                                    
+                                                </li>
+                                                <hr class="m-0">
+                                            <% }) %>
+                                           
+                                            
+                                        </div>
+                                        <% } else{ %>
+                                            <p>Không có thông báo</p>
+                                        <% } %>
+
+                                        <div class="d-flex justify-content-center">
+                                            <ul class="pagination mt-3">
+                                              <% if(page > 1) { %><li class="page-item"><a class="page-link" href="/noti/?page=<%=page-1%>"><i class="tf-icon bx bx-chevron-left"></i></a> <% } %></li> 
+                                              <% for(let i = iterator; i <= endingLink; i++) { %>
+                                                  <% if(i === page) { %>
+                                                    <li class="page-item active">
+                                                      <a class="page-link" href="/noti/?page=<%=i%>"><%=i%></a>
+                                                    </li>
+                                                  
+                                                  <% continue; %>
+                                              <% } %>
+                                                  <li class="page-item">
+                                                    <a class="page-link" href="/noti/?page=<%=i%>"><%=i%></a>
+                                                  </li>
+                                                  
+                                                  <% } %>
+                                                  <% if(page < numberOfPages) { %> 
+                                                    <li class="page-item" >
+                                                      <a class="page-link" href="/noti/?page=<%=page+1%>">
+                                                        <i class="tf-icon bx bx-chevron-right"></i>
+                                                      </a> 
+                                                    </li>
+                                                   
+                                                    <% } %>
+                                            </ul>
+                                          </div>   
+                                </div>
+                            </div>
+                           
+                        </div>
+                        
+                      </div>
+                    </div>
+                   
+            </div>
+            
+            <!-- / Content -->
+        </div>
+        
+    </div> 
+</div>   
+<script>
+  function update_noti(id){
+
+$.ajax({
+    url: `http://localhost:8001/api/v1/notification/update`,
+    method: "POST",
+    dataType: "json",
+    data: {id: id},
+    success: function(data) {
+      //alert(data.message);
+                      
+    },
+    error: function(err) {
+      alert(err.responseText);
+    }
+  });
+}
+</script>   
+<%- include('partials/footer.ejs') %>

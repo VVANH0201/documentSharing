@@ -1,0 +1,225 @@
+
+<%- include('partials/head.ejs') %>
+<!-- Layout wrapper -->
+<div class="container-fluid">
+    <%- include('partials/header.ejs') %>
+    <div class="content-wrapper">
+            <!-- Content -->
+        <div class="container-xxl flex-grow-1 container-p-y">
+                <div class="row">
+                    <div class="col-xl-12">
+                      <div class="nav-align-top mb-4">
+                        <ul class="nav nav-pills mb-3">
+                            <li class="nav-item m-2">
+                                <a
+                                  type="button"
+                                  class="nav-link  btn "
+                                  href="/account"
+                                  
+                                >
+                                  Thông tin chi tiết
+                                </a>
+                              </li>
+                          <li class="nav-item  m-2">
+                            <a
+                              type="button"
+                              class="nav-link "
+                              href="/mydocument"
+                              
+                            >
+                              Tài liệu của tôi
+                            </a>
+                          </li>
+                          <li class="nav-item  m-2">
+                            <a
+                              type="button"
+                              class="nav-link "
+                              href="/mypost"
+                            >
+                              Bài viết của tôi
+                            </a>
+                          </li>
+                          <li class="nav-item  m-2">
+                            <a
+                              type="button"
+                              class="nav-link active"
+                              href="/friend"
+                            >
+                              Người theo dõi
+                            </a>
+                          </li>
+                          
+                        </ul>
+                        <div class="row col-lg-12 ">
+                            
+                                <% if(check == true) {%>
+                                    <span class="mb-3">Tông số người đang theo dõi: <%= num %></span>
+                                    <% data.forEach(entry => { %>
+                                        <div class="col-md-4">
+                                            <div class="card mb-3">
+                                              <div class="row g-0">
+                                                <div class="col-md-4">
+                                                  <img class="card-img card-img-left p-3" src="/img/<%= entry.avatar_url %>" alt="Card image">
+                                                </div>
+                                                <div class="col-md-8">
+                                                  <div class="card-body">
+                                                    <a href="/user/ <%= entry.followed_user_id %>" style="cursor: pointer;">
+                                                        <h5 class="card-title"><%= entry.full_name %></h5>
+                                                    </a>
+                                                    <input type="text" value="<%= entry.followed_user_id %>" class="num" id="" hidden>
+                                                    <p class="card-text" id="following<%= entry.followed_user_id %>">
+                                                   
+                                                    </p>
+                                                    <p class="card-text" id="numpost<%= entry.followed_user_id %>">
+                                                     
+                                                    </p>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                        </div>
+                                    <% }) %>
+                                    <div class="d-flex justify-content-center">
+                                        <ul class="pagination mt-3">
+                                          <% if(page > 1) { %><li class="page-item"><a class="page-link" href="/friend/?page=<%=page-1%>"><i class="tf-icon bx bx-chevron-left"></i></a> <% } %></li> 
+                                          <% for(let i = iterator; i <= endingLink; i++) { %>
+                                              <% if(i === page) { %>
+                                                <li class="page-item active">
+                                                  <a class="page-link" href="/friend/?page=<%=i%>"><%=i%></a>
+                                                </li>
+                                              
+                                              <% continue; %>
+                                          <% } %>
+                                              <li class="page-item">
+                                                <a class="page-link" href="/friend/?page=<%=i%>"><%=i%></a>
+                                              </li>
+                                              
+                                              <% } %>
+                                              <% if(page < numberOfPages) { %> 
+                                                <li class="page-item">
+                                                  <a class="page-link" href="/friend/?page=<%=page+1%>">
+                                                    <i class="tf-icon bx bx-chevron-right"></i>
+                                                  </a> 
+                                                </li>
+                                               
+                                                <% } %>
+                                        </ul>
+                                      </div>
+                                    <% } else{ %>
+                                    <span>Không có người theo dõi</span>
+                                    
+                                    <% } %>
+                             
+                            
+                            
+
+                            
+
+                        </div>
+                        
+                      </div>
+                    </div>
+                   
+            </div>
+            
+            <!-- / Content -->
+        </div>
+        
+    </div> 
+</div>      
+<%- include('partials/footer.ejs') %>
+<script>
+    function loadfollowing(id){
+    //const id = document.getElementById('user_id').value;
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8001/api/v1/user/following/"+id,
+        
+        success: function (response) {
+            // Kiểm tra xem dữ liệu phản hồi có phải là null không
+            // 
+            let num = response.num;
+            $('#following'+id).append('Số người theo dõi: '+num);
+        },
+        error: function (error) {
+            console.log(error);
+        },
+
+    });
+  }
+  function loadNumberOfPost(id){
+    //const id = document.getElementById('user_id').value;
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8001/api/v1/post/get-by-user/"+id,
+        
+        success: function (response) {
+            // Kiểm tra xem dữ liệu phản hồi có phải là null không
+            // 
+            let num = response.data;
+            $('#numpost'+id).append('Số bài viết: ' +num);
+        },
+        error: function (error) {
+            console.log(error);
+        },
+
+    });
+  }
+  function getData() {
+    var inputs = document.getElementsByClassName('num');
+    var inputValues = [];
+
+    for (var i = 0; i < inputs.length; i++) {
+        inputValues.push(inputs[i].value);
+        loadfollowing(inputs[i].value);
+        loadNumberOfPost(inputs[i].value);
+    }
+    console.log(inputValues);
+    
+    // Sử dụng mảng inputValues ở đây
+}
+getData();
+</script>
+<!-- <script>
+  function handleLoginBtn(){
+    $("#loginBtn").on("click", function(event) {
+        event.preventDefault();
+        let user_id = $("#user_id").val();
+        let avatar_url = $("#upload").filename;
+        //let password = $("#password").val();
+        console.log(avatar_url);
+        console.log(user_id);
+        $.ajax({
+            url: `http://localhost:8001/api/v1/changefile`,
+            method: "POST",
+            data: {avatar_url: avatar_url},
+            success: function(data) {
+               console.log(data);
+               //alert("of");
+                //window.location.href = "/";
+            },
+            error: function(err) {
+                alert("Your email or password entered is incorrect. Please try again!");
+            }
+        })
+    });
+}
+$(document).ready(function() {
+    handleLoginBtn();
+});
+</script> -->
+<script>
+  
+// function handlesave(){
+//     $("#save").on("click", function(event) {
+//         event.preventDefault();
+//         const buttonChange = document.querySelector('#change'),
+//               buttonSave = document.querySelector('#save'),
+//               inputName = document.querySelector('#fullnanme');
+//         inputName.disabled  = true;      
+//         buttonSave.hidden = true;
+//         buttonChange.hidden = false;
+//     });
+// }
+
+</script>

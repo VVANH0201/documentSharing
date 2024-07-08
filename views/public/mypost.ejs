@@ -1,0 +1,335 @@
+
+<%- include('partials/head.ejs') %>
+<!-- Layout wrapper -->
+<div class="container-fluid">
+    <%- include('partials/header.ejs') %>
+    <div class="content-wrapper">
+            <!-- Content -->
+        <div class="container-xxl flex-grow-1 container-p-y">
+                <div class="row">
+                    <div class="col-xl-12">
+                      <div class="nav-align-top mb-4">
+                        <ul class="nav nav-pills mb-3">
+                            <li class="nav-item m-2">
+                                <a
+                                  type="button"
+                                  class="nav-link  btn "
+                                  href="/account"
+                                  
+                                >
+                                  Thông tin chi tiết
+                                </a>
+                              </li>
+                          <li class="nav-item  m-2">
+                            <a
+                              type="button"
+                              class="nav-link "
+                              href="/mydocument"
+                              
+                            >
+                              Tài liệu của tôi
+                            </a>
+                          </li>
+                          <li class="nav-item  m-2">
+                            <a
+                              type="button"
+                              class="nav-link active"
+                              href="/mypost"
+                            >
+                              Bài viết của tôi
+                            </a>
+                          </li>
+                          <li class="nav-item  m-2">
+                            <a
+                              type="button"
+                              class="nav-link "
+                              href="/friend"
+                            >
+                              Người theo dõi
+                            </a>
+                          </li>
+                        </ul>
+                       
+                        <div class="row card p-3">
+                          <% if(check == true) {%>
+                            <span>Tông số bản ghi: <%= num %></span>
+                            <div class="col-12">
+                             
+                                <table class="table table-striped table-sm" >
+                
+                                  <thead>
+                                    <tr>
+                                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
+                                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Tên bài viết</th>
+                                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Ngày tạo</th>
+                                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Trạng thái</th>
+                                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Lượt đọc</th>
+                                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Lượt thích</th>
+                                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Thao tác</th>
+                                      
+                                    </tr>
+                                  </thead>
+                              
+                                  <tbody>
+                                    <% data.forEach(entry => { %>
+                                      <tr>
+                                        <td class="text-secondary text-xs font-weight-bold ">
+                                          <div class="text-center">
+                                            <%= entry.id %>
+                                          </div>
+                                        </td>
+                                        <td class="text-secondary text-xs font-weight-bold ">
+                                          <div class="text-center">
+                                            <%= entry.title %>
+                                          </div>
+                                        </td>
+                                        <td class="text-secondary text-xs font-weight-bold ">
+                                          <div class="text-center">
+                                            <%=moment(entry.created_at).format('DD/MM/YYYY'); %>
+                                          </div>
+                                        </td>
+                                        <td class="text-secondary text-xs font-weight-bold ">
+                                          <div class="text-center">
+                                            <% if (entry.is_active == 1){ %>
+                                              <input class="form-check-input check"  type="checkbox" id="check<%= entry.id %>" onclick="check_onclick('<%= entry.id %>')">
+                                            <% } else{ %>
+                                              <input class="form-check-input check"  type="checkbox" id="check<%= entry.id %>" onclick="check_onclick('<%= entry.id %>')" checked>
+                                            <% } %>
+                                            
+                                          </div>
+                                        </td>
+                                        <td class="text-secondary text-xs font-weight-bold ">
+                                          <div class="text-center">
+                                            <%= entry.view_count %>
+                                          </div>
+                                        </td>
+                                        <td class="text-secondary text-xs font-weight-bold ">
+                                          <div class="text-center">
+                                            <%= entry.like_count %>
+                                          </div>
+                                        </td>
+                                        <td class="text-secondary text-xs font-weight-bold ">
+                                          <div class="d-flex justify-content-center">
+                                            <div class="text-center" style="margin-right: 20px;">
+                                              <a href="/post/<%= entry.id %>" >
+                                                <div class="avatar flex-shrink-0">
+                                                  <img src="/asset/img/show.png" alt="Credit Card" class="rounded">
+                                                </div>
+                                              </a>
+                                             </div>
+                                             <div class="text-center" style="margin-right: 20px;">
+                                               <a href="/viewpost/<%= entry.id %>" >
+                                                <div class="avatar flex-shrink-0">
+                                                  <img src="/asset/img/update.png" alt="Credit Card" class="rounded">
+                                                </div>
+                                              </a>
+                                              </div>
+                                              <!-- Button trigger modal -->
+                                              <a type="button" class="" data-bs-toggle="modal" data-bs-target="#basicModal<%= entry.id %>">
+                                                <div class="avatar flex-shrink-0">
+                                                  <img src="/asset/img/delete.png" alt="Credit Card" class="rounded">
+                                                </div>
+                                              </a>
+                        
+                                              <!-- Modal -->
+                                              <div class="modal fade" id="basicModal<%= entry.id %>" tabindex="-1" style="display: none;" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                  <form action="">
+                                                    <input type="text" value="<%= entry.id %>" name="post_id" id="post_id<%= entry.id %>" hidden>
+                                                    <div class="modal-content">
+                                                      <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel1">Xóa bản ghi</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                      </div>
+                                                      <div class="modal-body">
+                                                        <p>
+                                                          Bạn có chắc chắn muốn xóa bài viết <%= entry.title %>
+                                                        </p>
+                                                      </div>
+                                                      <div class="modal-footer">
+                                                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                                          Đóng
+                                                        </button>
+                                                        <button type="button" class="btn btn-primary" id="changepass" onclick="deletePost('<%= entry.id %>')" >Xác nhận</button>
+                                                      </div>
+                                                    </div>
+                                                  </form>
+                                                  
+                                                </div>
+                                              </div>
+                                          </div>
+                                          
+                                        </td>
+                                        
+                                      </tr>
+                                     
+                                  <% }) %>
+                                  </tbody>
+                                </table>
+                                <div class="d-flex justify-content-center">
+                                  <ul class="pagination mt-3">
+                                    <% if(page > 1) { %><li class="page-item"><a class="page-link" href="/mypost/?pagepost=<%=page-1%>"><i class="tf-icon bx bx-chevron-left"></i></a> <% } %></li> 
+                                    <% for(let i = iterator; i <= endingLink; i++) { %>
+                                        <% if(i === page) { %>
+                                          <li class="page-item active">
+                                            <a class="page-link" href="/mypost/?pagepost=<%=i%>"><%=i%></a>
+                                          </li>
+                                        
+                                        <% continue; %>
+                                    <% } %>
+                                        <li class="page-item">
+                                          <a class="page-link" href="/mypost/?pagepost=<%=i%>"><%=i%></a>
+                                        </li>
+                                        
+                                        <% } %>
+                                        <% if(page < numberOfPages) { %> 
+                                          <li class="page-item" >
+                                            <a class="page-link" href="/mypost/?pagepost=<%=page+1%>">
+                                              <i class="tf-icon bx bx-chevron-right"></i>
+                                            </a> 
+                                          </li>
+                                         
+                                          <% } %>
+                                  </ul>
+                                </div>
+                                
+                               
+                                 
+                            </div>
+                            <% } else{ %>
+                              <span>Không có dữ liệu</span>
+                              <a class="btn btn-outline-secondary mt-3" href="/uploadpost">Đăng bài viết ngay</a>
+                              <% } %>
+                        </div>
+                      </div>
+                    </div>
+                   
+            </div>
+            
+            <!-- / Content -->
+        </div>
+        
+    </div> 
+</div>      
+<%- include('partials/footer.ejs') %>
+<script>
+  function deletePost(id){
+    const model = document.getElementById('basicModal'+id);
+    $.ajax({
+                  url: `http://localhost:8001/api/v1/post/delete/${id}`,
+                  method: "POST",
+                  dataType: "json",
+                  
+                  success: function(data) {
+                      console.log(data);
+                      console.log(data.check);
+                      model.style.display = 'none';
+                      $.toast({
+                    heading: 'Xóa thành công',
+                    text: '',
+                    showHideTransition: 'slide',
+                    icon: 'success',
+                    loaderBg: '#fa6342',
+                    position: 'bottom-right',
+                    hideAfter: 3000,
+                });
+                      setTimeout(function() {
+                        window.location.href = "/mypost";
+                      }, 3000);
+                      
+                      
+                  },
+                  error: function(err) {
+                     alert(err.responseText);
+                  }
+              });
+  }
+</script>
+<!-- <script>
+  function handleLoginBtn(){
+    $("#loginBtn").on("click", function(event) {
+        event.preventDefault();
+        let user_id = $("#user_id").val();
+        let avatar_url = $("#upload").filename;
+        //let password = $("#password").val();
+        console.log(avatar_url);
+        console.log(user_id);
+        $.ajax({
+            url: `http://localhost:8001/api/v1/changefile`,
+            method: "POST",
+            data: {avatar_url: avatar_url},
+            success: function(data) {
+               console.log(data);
+               //alert("of");
+                //window.location.href = "/";
+            },
+            error: function(err) {
+                alert("Your email or password entered is incorrect. Please try again!");
+            }
+        })
+    });
+}
+$(document).ready(function() {
+    handleLoginBtn();
+});
+</script> -->
+<script>
+  
+// function handlesave(){
+//     $("#save").on("click", function(event) {
+//         event.preventDefault();
+//         const buttonChange = document.querySelector('#change'),
+//               buttonSave = document.querySelector('#save'),
+//               inputName = document.querySelector('#fullnanme');
+//         inputName.disabled  = true;      
+//         buttonSave.hidden = true;
+//         buttonChange.hidden = false;
+//     });
+// }
+function PrivatePost (id){
+  $.ajax({
+                url: `http://localhost:8001/api/v1/posts/set-private`,
+                method: "POST",
+                dataType: "json",
+                data: {id: id},
+                success: function(data) {
+                    console.log(data.message);
+                    //console.log(data.check);
+                    alert("Đã ẩn bài viết thành công");
+                    window.location.href = "/mypost";
+                    
+                },
+                error: function(err) {
+                   alert(err.responseText);
+                }
+            });
+}
+function PublicPost(id){
+  $.ajax({
+                url: `http://localhost:8001/api/v1/posts/set-public`,
+                method: "POST",
+                dataType: "json",
+                data: {id: id},
+                success: function(data) {
+                    console.log(data.message);
+                    //console.log(data.check);
+                    alert("Trạng thái bài viết được chỉnh thành công khai");
+                    window.location.href = "/mypost";
+                    
+                },
+                error: function(err) {
+                   alert(err.responseText);
+                }
+            });
+}
+function check_onclick(i){
+      var inputs = document.getElementById('check'+i);
+      if(inputs.checked){
+        console.log("Ban da chon "+i);
+        PrivatePost(i);
+      }
+      else{
+        PublicPost(i);
+      }
+    }
+</script>

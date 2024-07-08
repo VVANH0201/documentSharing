@@ -1,0 +1,185 @@
+<%- include('partials/head.ejs') %>
+<div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+        <%- include('partials/sidebar.ejs') %>
+        <div class="layout-page">
+            <%- include('partials/nav.ejs') %>
+            <div class="content-wrapper">
+                <!-- Content -->
+    
+                <div class="container-xxl flex-grow-1 container-p-y">
+                    <div class="tab-pane fade show active" id="navs-pills-top-home" role="tabpanel">
+                        <div class="row">
+                            <div class="col-md-12">
+                              <div class="card mb-4">
+                                <h5 class="card-header">Thông tin chi tiết</h5>
+                          
+                                <!-- Account -->
+                                <div class="card-body">
+                                  <div class="d-flex align-items-start align-items-sm-center gap-4">
+                                  
+                                      <img
+                                          src="/img/<%= user.avatar_url%>"
+                                          alt="user-avatar"
+                                          class="d-block rounded"
+                                          height="100"
+                                          width="100"
+                                          id="uploadedAvatar"
+                                          
+                                          />
+                                         
+                                      
+                                          
+                                      
+                                 
+                                    
+                                  </div>
+                                </div>
+                                <hr class="my-0" />
+                                <div class="card-body">
+                                  
+                                    <div class="row">
+                                      <div class="mb-3 col-md-6">
+                                        <label for="fullname" class="form-label">Họ và tên:</label>
+                                        <input
+                                          class="form-control"
+                                          type="text"
+                                          id="fullnanme"
+                                          name="fullname"
+                                          value="<%= user.full_name %>" 
+                                          disabled="true"
+                                        />
+                                      </div>
+                                    
+                                      <div class="mb-3 col-md-6">
+                                        <label for="email" class="form-label">E-mail</label>
+                                        <input
+                                          class="form-control"
+                                          type="text"
+                                          id="email"
+                                          name="email"
+                                          value="<%= user.email %>"
+                                          disabled="true"
+                                          
+                                        />
+                                      </div>
+                                      <div class="mb-3 col-md-6">
+                                        <label for="email" class="form-label">E-mail</label>
+                                        <input
+                                          class="form-control"
+                                          type="text"
+                                          id="username"
+                                          name="username"
+                                          value="<%= user.username %>"
+                                          disabled="true"
+                                          
+                                        />
+                                      </div>
+                                      <div class="mb-3 col-md-6">
+                                        <label for="email" class="form-label">E-mail</label>
+                                        <input
+                                          class="form-control"
+                                          type="text"
+                                          id="phone_number"
+                                          name="phone_number"
+                                          value="<%= user.phone_number %>"
+                                          disabled="true"
+                                          
+                                        />
+                                      </div>
+
+                                      <div class="mb-3 col-md-6">
+                                        <label for="email" class="form-label">Dia chi</label>
+                                        <input
+                                          class="form-control"
+                                          type="text"
+                                          id="address"
+                                          name="address"
+                                          value="<%= user.address %>"
+                                          disabled="true"
+                                          
+                                        />
+                                      </div>
+                                      
+                                    </div>
+                                   
+                                  
+                                </div>
+                               
+                              </div>
+                              
+                            </div>
+                        </div> 
+                      </div>
+                       
+    
+                    <hr class="my-5">
+                    <td class="text-secondary text-xs font-weight-bold ">
+                        <div class="d-flex justify-content-center">
+                          
+                          <a type="button" class="" data-bs-toggle="modal" data-bs-target="#basicModal<%= user.id %>" style="margin-right: 20px;">
+                            <div class="avatar flex-shrink-0">
+                              <img src="/asset/img/delete.png" alt="Credit Card" class="rounded">
+                            </div>
+                          </a>
+                            <!-- <a type="button" class="" data-bs-toggle="modal" data-bs-target="#basicModal<%= user.id %>">
+                              Xóa
+                            </a> -->
+      
+                            
+                            <div class="modal fade" id="basicModal<%= user.id %>" tabindex="-1" style="display: none;" aria-hidden="true">
+                              <div class="modal-dialog" role="document">
+                                <form action="">
+                                  <input type="text" value="<%= user.id %>" name="post_id" id="post_id<%= user.id %>" hidden>
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="exampleModalLabel1">Xóa bản ghi</h5>
+                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                      <p>
+                                        Bạn có chắc chắn muốn xóa người dùng này !
+                                      </p>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                        Đóng
+                                      </button>
+                                      <button type="button" class="btn btn-primary" id="changepass" onclick="deleteuser('<%= user.id %>')" >Xác nhận</button>
+                                    </div>
+                                  </div>
+                                </form>
+                                
+                              </div>
+                            </div>
+                        </div>
+                        
+                      </td>
+                
+              
+              </div>
+        </div>
+    </div>
+</div>        
+
+<%- include('partials/footer.ejs') %>
+<script>
+    function deleteuser(id){
+  $.ajax({
+                url: `http://localhost:8001/api/v1/admin/deluser/${id}`,
+                method: "POST",
+                dataType: "json",
+                
+                success: function(data) {
+                    console.log(data.message);
+                    //console.log(data.check);
+                    alert("Đã xóa thành công");
+                    window.location.href = "/admin/user";
+                    
+                },
+                error: function(err) {
+                   alert(err.responseText);
+                }
+            });
+}
+</script>

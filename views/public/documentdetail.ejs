@@ -1,0 +1,1319 @@
+
+<%- include('partials/head.ejs') %>
+
+<!-- Layout wrapper -->
+<div class="container-fluid">
+    <%- include('partials/header.ejs') %>
+    <div class="content-wrapper">
+            <!-- Content -->
+        <div class="container-xxl flex-grow-1 container-p-y">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-style1">
+                  <li class="breadcrumb-item">
+                    <a href="/home">Trang chủ</a>
+                  </li>
+                  <li class="breadcrumb-item">
+                    <a href="/types/<%= document.type_id %>"> <%= document.name %></a>
+                  </li>
+                  <li class="breadcrumb-item active"><%= document.title %></li>
+                </ol>
+            </nav>
+            <!-- <h1>ID: <%= document.id %></h1> -->
+            <!-- <div id="like_count" class="d-flex align-items-center"></div> -->
+            <!-- <p >like count: <%= document.like_count %></p> -->
+            <!-- <p >view count: <%= document.view_count %></p>
+            <p>download_count: <%= document.download_count %></p>
+            <p><%= moment(document.created_at).format('Do MMMM, YYYY') %></p> -->
+            
+            <!-- <a href="/img/<%= document.link%>" download class="btn btn-small btn-secondary">Download</a> -->
+            <input type="text" value="<%=document.id  %>" hidden id="document_id">
+            <input type="text" value="<%=document.user_id  %>" hidden id="own_id">
+            <input type="text" value="<%=user.id  %>" hidden id="user_id">
+            <input type="text" value="<%=document.type_id  %>" hidden id="type_id">
+            <div class="row d-flex">
+                <div class="col-md-9">
+                    <div class="card mb-3 p-3">
+                        <li class="d-flex mb-4 pb-1">
+                            <div class="avatar flex-shrink-0 me-3">
+                              <img src="/img/<%=document.avatar_url  %>" alt="User" class="rounded">
+                            </div>
+                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                              <div class="me-2">
+                                <a href="/user/<%=document.user_id  %>" class="text-muted d-block mb-1"><%=document.full_name  %></a>
+                                <div class="d-flex align-items-center">
+                                    <h6 class="mb-0">Đã đăng vào <%=  moment(document.created_at).format('DD/MM/YYYY'); %> | Loại file: <%=document.file_type  %> </h6>
+                                    <h6 class="mb-0" style="margin-left: 10px;" id="output"></h6>
+                                </div>
+                                
+                                <div id="like_count" class="d-flex align-items-center"></div>
+                                <div class="d-flex align-items-center" >
+                                    
+                                    <div class="d-flex align-items-center" style="margin-right: 10px;">
+                                        <i class='bx bxs-download' ></i>
+                                        <div class="text-muted"><%= document.download_count%></div>
+                                    </div> 
+                                    <div class="d-flex align-items-center" style="margin-right: 10px;">
+                                        <i style="color: #23d2e2;" class='bx bx-show'></i>
+                                        <div class="text-muted"><%= document.view_count %></div>
+                                    </div>
+                                    <div class="d-flex align-items-center" style="margin-right: 10px;">
+                                        <button class="btn p-0" type="button" data-bs-toggle="modal" data-bs-target="#basicModal<%= document.id %>">
+                                            <i style="color: red;" class='bx bx-error-circle'></i>
+                                            <span>Báo xấu</span>
+                                        </button>
+                                    </div>
+                                    
+                                    
+                                </div>
+                                <!-- <p >Lượt xem: <%= document.view_count %></p>
+                                <p>Lượt tải: <%= document.download_count%></p> -->
+                                
+                              </div>
+                              <div>
+                                    <span style="color: red;">Vui lòng tải xuống để xem tài liệu đầy đủ</span>
+                                  <button id="dl_button"  class="btn rounded-pill btn-primary" onclick="download_file(('<%= document.id%>'),('<%=user.id  %>'),('<%= document.link%>'))">Download</button>
+                              </div>
+                              <div class="modal " id="showloading" style="height: 200px;">
+                                <div class="modal-body modal-dialog modal-sm d-flex modal-content  modal-dialog-centered"  style="justify-content: center;">
+
+                                  <div class="loader"></div>
+                                </div>
+                              </div>
+                              
+                              <!-- <div class="modal fade show" id="showloading">
+                                <div class="modal-dialog modal-sm modal-dialog-centered">
+                                  <div class="modal-content">
+                                    
+                                    
+                                    
+                                  </div>
+                                </div>
+                              </div> -->
+                             
+                              <!-- <div class="user-progress d-flex align-items-center gap-1">
+                                <h6 class="mb-0">+82.6</h6>
+                                <span class="text-muted">USD</span>
+                              </div> -->
+                            </div>
+                          </li>
+                          <hr class="m-0">
+                          <h1 class="p-3 title1"><%= document.title %></h1>
+                        <hr class="m-0">
+                        <div class="mt-3 ">
+                            <div class="row">
+                                <div id="pdfContainer" class="pdf" style="background-color: #333; padding: 10px 0;">
+                                </div>
+                                <div class="d-flex align-items-center justify-content-center mt-4">
+                                    <button class="btn btn-sm btn-primary" id="seeMoreButton" style="display:none;">Đọc thêm</button>
+                                    <span id="text_more" style="color: red; display: none;">Để đọc tiếp tài liệu vui lòng tải xuống.</span>
+                                </div>
+                               
+                                <input type="text" value="<%= document.link%>" hidden id="link">
+                            </div>
+                            
+                            <!-- <iframe style="width: 95%; height: 975px;" src="/img/<%= document.link%>" frameborder="0"></iframe> -->
+                            <div style="text-align: justify;height: 800px " class="card p-3 mb-3 mt-3" >
+                                <h4>Nội dung</h4>
+                                <div class="ps ps--active-y" id="vertical-example">
+                                    <%= document.data_text %>
+                                    <div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div>
+                                    <div class="ps__rail-y" style="top: 0px; height: 800px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 39px;"></div></div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    <h5 id="num"></h5>
+                    <div class="comments">
+                        <div class="comment_input">
+                            <textarea id="myInput" class="comment_textarea" placeholder="Bình luận của bạn"></textarea>
+                            <button class="comment_submit" onclick="newcomment(('<%= user.id %>'), ('<%= document.id %>'),('<%= document.user_id %>'))">Gửi</button>
+                        </div>
+
+                        <div class="coment-area" style="display: block;">
+                            <ul class="we-comet card p-3" id="list_comment">
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="row card">
+                        <h5 class="title1" id="text_list_document_user" style="display: none;">Tài liệu cùng người dùng</h5>
+                        <div id="list_document_user"></div>
+                        
+                        
+                        
+                        
+                    </div>
+                    <div class="card row mt-3">
+                        <h5 class=" title1">Tài liệu liên quan</h5>
+                        <div id="list_document"></div>
+                    </div>
+                </div>
+            </div>
+                <!-- list -->
+                
+           
+        </div> 
+        
+        
+        
+
+    </div> 
+</div>     
+<!-- Modal -->
+<div class="modal fade" id="basicModal<%= document.id %>" tabindex="-1" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <form action="">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel1">Báo cáo vi phạm</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col mb-3">
+               <span>Hãy cho chúng tôi biết lý do bạn muốn thông báo. Chúng tôi sẽ khắc phục vấn đề này trong thời gian ngắn nhất.</span>
+                <input type="text" id="document_id" class="form-control" name="document_id" value="<%= document.id%>" disabled="true" hidden >
+                
+              </div>
+
+            </div>
+            <input type="text" id="user_id" class="form-control" name="user_id" value="<%= document.user_id%>" hidden>
+            <div class="row">
+
+              <div class="col mb-3">
+                <div class="form-check mt-3">
+                    <input name="bad_type" class="form-check-input" type="radio" value="" id="rad_1">
+                    <label class="form-check-label" for="rad_1"> Có nội dung khiêu dâm </label>
+                </div>
+                <div class="form-check mt-3">
+                    <input name="bad_type" class="form-check-input" type="radio" value="" id="rad_2">
+                    <label class="form-check-label" for="rad_2"> Có nội dung phản động </label>
+                </div>
+                <div class="form-check mt-3">
+                    <input name="bad_type" class="form-check-input" type="radio" value="" id="rad_3">
+                    <label class="form-check-label" for="rad_3"> Spam </label>
+                </div>
+                <div class="form-check mt-3">
+                    <input name="bad_type" class="form-check-input" type="radio" value="" id="rad_4">
+                    <label class="form-check-label" for="rad_4"> Vi phạm bản quyền </label>
+                </div>
+                <div class="form-check mt-3">
+                    <input name="bad_type" class="form-check-input" type="radio" value="" id="rad_5">
+                    <label class="form-check-label" for="rad_5"> Không đúng tiêu đề </label>
+                </div>
+                <!-- <label for="report_reason" class="form-label">Lí do:</label>
+                <textarea type="text" id="report_reason" class="form-control" name="report_reason" placeholder="" rows="3"></textarea> -->
+              </div>
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+              Đóng
+            </button>
+            <button type="button" class="btn btn-primary" id="okButton" >Đồng ý</button>
+          </div>
+        </div>
+      </form>
+      
+    </div>
+  </div>
+<%- include('partials/footer.ejs') %>
+<style>
+    /* HTML: <div class="loader"></div> */
+.loader {
+  width: fit-content;
+  font-weight: bold;
+  font-family: monospace;
+  font-size: 30px;
+  clip-path: inset(0 3ch 0 0);
+  animation: l4 1s steps(4) infinite;
+}
+.loader:before {
+  content:"Đang tải..."
+}
+@keyframes l4 {to{clip-path: inset(0 -1ch 0 0)}}
+   .pdf{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content:center;
+    gap: 10px;
+   }
+
+
+    .comet-avatar {
+    display: inline-block;
+    max-width: 30px;
+    vertical-align: top;
+    width: 30px;
+}
+    .coment-area {
+    margin-top: 20px;
+    width: 100%;
+	display: none;
+	float: left;
+}
+
+.we-comet {
+    float: left;
+    width: 100%;
+    padding-left: 0;
+    list-style: none;
+	margin-bottom: 0;
+}
+
+.we-comet > li {
+    display: inline-block;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.we-comet > li:last-child {
+    margin-bottom: 0;
+}
+
+.comet-avatar {
+    display: inline-block;
+    max-width: 36px;
+    vertical-align: top;
+    width: 36px;
+}
+
+.we-comment {
+    border-bottom: 1px solid #ede9e9;
+    display: inline-block;
+    padding-bottom: 8px;
+    padding-left: 8px;
+    position: relative;
+    vertical-align: top;
+    width: 92%;
+}
+
+.inline-itms > a i {
+    margin-right: 3px;
+}
+.inline-itms > a span {
+    font-size: 11px;
+}
+.inline-itms {
+    display: inline-block;
+    margin-top: 5px;
+    width: 100%;
+}
+
+
+/*.we-comment::before,
+.peoples-mesg-box > ul > li p:before {
+    border-bottom: 10px solid transparent;
+    border-right: 11px solid #ede9e9;
+    border-top: 10px solid transparent;
+    left: -11px;
+    top: 10px;
+    position: absolute;
+    content: '';
+}
+
+.we-comment::after,
+.peoples-mesg-box > ul > li p:after {
+    border-bottom: 8px solid transparent;
+    border-right: 9px solid #fff;
+    border-top: 8px solid transparent;
+    left: -9px;
+    top: 12px;
+    position: absolute;
+    content: '';
+}*/
+
+.we-comet > li ul {
+    border-left: 2px solid #23d2e2;
+    list-style: outside none none;
+    margin-left: 20px;
+    margin-top: 20px;
+    padding-left: 15px;
+}
+
+.we-comet > li ul li {
+    margin-bottom: 20px;
+}
+
+.we-comet li a.showmore {
+    display: table;
+    font-size: 12px;
+    margin: 0 auto;
+    text-transform: capitalize;
+	font-weight: 500;
+}
+
+.we-comet > li ul li:last-child {
+    margin-bottom: 0;
+}
+
+.coment-head {
+    display: inline-block;
+    width: 100%;
+}
+
+.we-comment > h5 {
+    color: #515365;
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 0;
+    margin-right: 8px;
+    width: auto;
+    text-transform: capitalize;
+}
+
+.we-comment > p {
+    display: inline;
+    font-size: 13.4px;
+    line-height: 20px;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.inline-itms > a, 
+.inline-itms > span {
+    display: inline-block;
+    font-size: 12px;
+    margin-right: 10px;
+    text-transform: capitalize;
+}
+
+.coment-head > span {
+    color: #999;
+    font-size: 12px;
+    padding-left: 10px;
+    display: inline-block;
+}
+
+
+
+
+    .comment_textarea {
+      padding: 20px;
+      border-radius: 10px;
+      min-height: 200px;
+      width: 100%;
+    }
+    .comment_textarea_reply {
+      padding: 20px;
+      border-radius: 10px;
+      min-height: 100px;
+      width: 80%;
+    }
+    .comment_submit {
+      padding: 10px 50px;
+      border-radius: 10px;
+      background: white;
+      color: #333;
+    }
+    
+    .comment_item {
+      padding: 20px;
+      border-radius: 10px;
+      background: white;
+      color: #333;
+      margin-top: 20px;
+    }
+    .comment_item > p:first-child {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 20px;
+    }
+    .comment_item > p:first-child a {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      font-weight: bold;
+    }
+    .comment_item > p:first-child a img {
+      border-radius: 50%;
+    }
+</style>
+<script>
+    function getcomment(){
+        const document_id = document.getElementById(`document_id`).value;
+        //const document_id = id;
+        $.ajax({
+            url: `http://localhost:8001/api/v1/comment/document/${document_id}`, // Replace with your actual API endpoint URL
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+            if (response.message === 'ok') {
+                const comments = response.data;
+                let count = response.num;
+                console.log(response.data);
+                console.log(response.message);
+                $('#num').empty();
+                $('#num').append(`Bình luận (` + count + `)`);
+                // Handle successful response and display comments (replace with your desired logic)
+                $('#list_comment').empty(); // Clear existing comments (optional)
+                for (const comment of comments) {
+                    const commentHtml = `
+                    <li>
+                        <div class="avatar avatar-online" style="display: inline-block; ">
+                            <img style="border-radius: 100%;" src="/img/${comment.avatar_url}" alt=""> 
+                        </div>
+                        <div class="we-comment">
+                            <div class="d-flex justify-content-between">
+                                <h4><a href="/user/${comment.user_id}" title="">${comment.full_name} </a></h4>
+                                            
+                                <div class="btn-group">
+                                    <button class="btn  btn-xs btn-icon rounded-pill dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" onclick = "updateComment(${comment.id})">Sửa</a></li>
+                                        <li><a class="dropdown-item" onclick = "deleteComment(${comment.id})">Xóa</a></li>
+                                        
+                                    </ul>
+                                </div>
+                            </div>
+                                        
+                            <h5 id = "currentcontentComment${comment.id}"> ${comment.content}
+                                
+                            </h5>
+                            <div id="editComment${comment.id}" style="display: none;">
+                            <textarea class="comment_textarea_reply" id="editedContentComment${comment.id}"></textarea>
+                            <button class=" btn" id="saveButton" onclick="saveEditComment(${comment.id},${comment.document_id})" >Sửa</button>
+                            </div>
+                            <div class="inline-itms">
+                                <span>${countTime(comment.created_at)}</span>
+                                <a class="we-reply" onclick="showReplyForm(${comment.id})" title="Reply"><i class='bx bx-reply'></i></i></a>
+                                <a onclick = "likecomment(${comment.id}, ${comment.user_id})" title=""><i class='bx bx-heart' ></i></i><span>${comment.like_count} </span></a>
+                                <ul id="nestedComments${comment.id}" class="nested-comments" style="display: none;">
+
+                                </ul>
+                                <div id="replyForm${comment.id}" class = "mt-2" style="display: none;">
+                                    <textarea id="newReplyContent${comment.id}" class="comment_textarea_reply" placeholder=""></textarea>
+                                    <button class="post-btn btn " onclick="addNewReply(${comment.id},${comment.document_id},${comment.id}, ${comment.user_id})">Trả lời</button>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    `;
+            $('#list_comment').append(commentHtml);
+           
+          }
+        } else {
+          alert('An error occurred: ' + response.message); // Handle potential errors
+        }
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        console.error('Error:', textStatus, errorThrown);
+        alert('There was a problem fetching comments. Please try again later.'); // User-friendly error message
+      }
+    });
+    }
+    function showReplyForm(comment_id) {
+    const nestedComments = document.getElementById(`nestedComments${comment_id}`);
+
+    if (nestedComments.style.display === 'none' || nestedComments.style.display === '') {
+        nestedComments.style.display = 'block';
+    } else {
+        nestedComments.style.display = 'none';
+    }
+    
+    $.ajax({
+        type: "GET",
+        url: `http://localhost:8001/api/v1/comment/${comment_id}`,
+        headers: {
+            // 'Authorization' : 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBWZXIiOiIwLjAuMCIsImV4cCI6NDcyNjM4OTEyMiwibG9jYWxlIjoiIiwibWFzdGVyVmVyIjoiIiwicGxhdGZvcm0iOiIiLCJwbGF0Zm9ybVZlciI6IiIsInVzZXJJZCI6IiJ9.QIZbmB5_9Xlap_gDhjETfMI6EAmR15yBtIQkWFWJkrg',
+        },
+        success: function (response) {
+
+            if (response.data == null) {
+                console.log("no");
+            } else {
+                //numComment = response.data.length;
+                let $str = response.data.map(function (comment) {
+                    return `
+                    <li>
+                        <div class="avatar avatar-online" style="display: inline-block; ">
+                            <img style="border-radius: 100%;" src="/img/${comment.avatar_url}" alt=""> 
+                        </div>
+                        <div class="we-comment">
+                            <div class="d-flex justify-content-between">
+                                <h4><a href="/user/${comment.user_id}" title="">${comment.full_name} </a></h4>
+                                            
+                                <div class="btn-group">
+                                    <button class="btn  btn-xs btn-icon rounded-pill dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="bx bx-dots-vertical-rounded"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" onclick = "updateComment(${comment.id})">Sửa</a></li>
+                                        <li><a class="dropdown-item" onclick = "deleteComment(${comment.id})">Xóa</a></li>
+                                        
+                                    </ul>
+                                </div>
+                            </div>
+                                        
+                            <h5 id = "currentcontentComment${comment.id}"> ${comment.content}
+                                
+                            </h5>
+                            <div id="editComment${comment.id}" style="display: none;">
+                            <textarea class="comment_textarea_reply" id="editedContentComment${comment.id}"></textarea>
+                            <button class=" btn" id="saveButton" onclick="saveEditComment(${comment.id})" >Sửa</button>
+                            </div>
+                            <div class="inline-itms">
+                                <span>${countTime(comment.created_at)}</span>
+                                <a class="we-reply" onclick="showReplyForm(${comment.id})" title="Reply"><i class='bx bx-reply'></i></i></a>
+                                <a onclick = "likecomment(${comment.id}, ${comment.user_id})" title=""><i class='bx bx-heart' ></i></i><span>${comment.like_count} </span></a>
+                                <ul id="nestedComments${comment.id}" class="nested-comments" style="display: none;">
+
+                                </ul>
+                                <div id="replyForm${comment.id}" class ="mt-2" style="display: none;">
+                                    <textarea id="newReplyContent${comment.id}" class="comment_textarea_reply" placeholder=""></textarea>
+                                    <button class="post-btn" onclick="addNewReply(${comment.id},${comment.document_id},${comment.id},${comment.user_id})">Trả lời</button>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                
+                `;
+                });
+                //var str1 = "" + numComment;
+                $("#nestedComments" + "" + comment_id).html($str);
+                //$("#numCm" + id_post).html(str1);
+            }
+        },
+    });
+
+    const replyForm = document.getElementById(`replyForm${comment_id}`);
+
+    if (replyForm.style.display === 'none' || replyForm.style.display === '') {
+        replyForm.style.display = 'block';
+    } else {
+        replyForm.style.display = 'none';
+    }
+}
+getcomment();
+function likecomment(comment_id, own_id){
+    const user_id = document.getElementById(`user_id`).value; 
+    //const own_id = document.getElementById('own_id').value;
+    $.ajax({
+        type: "POST",
+        url: `http://localhost:8001/api/v1/like/comment` ,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify({
+            user_id: user_id,
+            comment_id: comment_id,
+            own_id: own_id
+        }),
+        success: function (response) {
+           
+            // Kiểm tra xem dữ liệu phản hồi có phải là null không
+           console.log(response.message);
+          
+           getcomment();
+        },
+        error: function (error) {
+            console.log(error);
+            getcomment();
+        },
+    });
+}
+function newcomment(user_id, document_id,own_id){
+    var content = document.getElementById("myInput").value;
+    console.log(content);
+    var requests = {
+        "url": `http://localhost:8001/api/v1/comment/document`,
+        "method": "POST",
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "data": JSON.stringify({
+            "user_id": user_id,
+            "document_id": document_id,
+            "content": content,
+            "own_id" : own_id
+        })
+    }
+    $.ajax(requests).done(function (response) {
+        console.log(response.message);
+        getcomment();
+    })
+        .fail(function (errorThrown) {
+            console.error("Lỗi: ", errorThrown);
+           getcomment();
+        });
+}
+function updateComment(comment_id){
+    const user_id = document.getElementById(`user_id`).value; 
+    $.ajax({
+        type: "POST",
+        url: `http://localhost:8001/api/v1/comment/checkuser`,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify({
+            user_id: user_id,
+            comment_id: comment_id
+            
+        }),
+        success: function (data) {
+            console.log(data);
+            // Kiểm tra xem dữ liệu phản hồi có phải là null không
+            if(data.status == 1){
+                document.getElementById('editComment' + comment_id).style.display = 'block';
+                const currentContent = document.getElementById('currentcontentComment' + comment_id).innerText;
+                document.getElementById('editedContentComment' + comment_id).value = currentContent;
+                const text = document.getElementById('currentcontentComment'+comment_id);
+                text.style.display = 'none';
+            }
+            else{
+                $.toast({
+            heading: 'Bạn không được sửa bình luận của người khác',
+            text: 'Bạn không được sửa bình luận của người khác',
+            showHideTransition: 'fade',
+            icon: 'error',
+            hideAfter: 3000,
+            loaderBg: '#fa6342',
+            position: 'bottom-right',
+        });
+            }
+        },
+        error: function (error) {
+            console.log(error);
+        },
+
+    });
+    
+
+}
+function saveEditComment(comment_id) {
+    var editedContent = document.getElementById('editedContentComment' + comment_id).value;
+    console.log(comment_id);
+    console.log(editedContent);
+    $.ajax({
+        type: "POST",
+        url: `http://localhost:8001/api/v1/comment/update` ,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify({
+            comment_id: comment_id,
+            content: editedContent
+        }),
+        success: function (response) {
+           
+            // Kiểm tra xem dữ liệu phản hồi có phải là null không
+           console.log(response.message);
+           getcomment();
+        },
+        error: function (error) {
+            console.log(error);
+            getcomment();
+        },
+    });
+    //check xem day co phai comment cua minh hay la ko
+       
+}
+
+function addNewReply(comment_id,document_id, parent_comment_id,own_id) {
+    const user_id = document.getElementById(`user_id`).value; 
+    var editedContent = document.getElementById('newReplyContent' + comment_id).value;
+   console.log(editedContent);
+   console.log(user_id);
+    $.ajax({
+        type: "POST",
+        url: `http://localhost:8001/api/v1/comment/parentcomment`,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify({
+            user_id: user_id,
+            document_id: document_id,
+            parent_comment_id: parent_comment_id,
+            content: editedContent,
+            own_id: own_id
+        }),
+        success: function (response) {
+            // Kiểm tra xem dữ liệu phản hồi có phải là null không
+            if (response.data != null) {
+                //loadData();
+               getcomment();
+            } else {
+                //loadData();
+               getcomment();
+                //showReplyForm(comment_id);
+            }
+        },
+        error: function (error) {
+            console.log(error);
+            getcomment();
+        },
+    });
+}
+function deleteComment(comment_id) {
+    const user_id = document.getElementById(`user_id`).value; 
+    console.log(user_id);
+    $.ajax({
+        type: "POST",
+        url: `http://localhost:8001/api/v1/comment/checkuser`,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify({
+            user_id: user_id,
+            comment_id: comment_id
+            
+        }),
+        success: function (data) {
+            console.log(data);
+            // Kiểm tra xem dữ liệu phản hồi có phải là null không
+            if(data.status == 1){
+                $.ajax({
+                    type: "POST",
+                    url: `http://localhost:8001/api/v1/comment/del`,
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    data: JSON.stringify({
+                        user_id: user_id,
+                        comment_id: comment_id
+                        
+                    }),
+                    success: function (response) {
+                        console.log(response);
+                        // Kiểm tra xem dữ liệu phản hồi có phải là null không
+                        if (response.check === 1) {
+                            alert(response.message);
+                            getcomment();
+                        } else {
+                        getcomment();
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    },
+
+                });
+            }
+            else{
+                $.toast({
+            heading: 'Bạn không được xóa bình luận của người khác',
+            text: 'Bạn không được xóa bình luận của người khác',
+            showHideTransition: 'fade',
+            icon: 'error',
+            hideAfter: 3000,
+            loaderBg: '#fa6342',
+            position: 'bottom-right',
+        });
+            }
+        },
+        error: function (error) {
+            console.log(error);
+        },
+
+    });
+}
+loadDocument();
+function loadDocument(){
+    const document_id = document.getElementById(`document_id`).value;
+    $.ajax({
+        type: "GET",
+        url: `http://localhost:8001/api/v1/document/${document_id}`,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        
+        success: function (response) {
+            console.log("data" + response.data);
+            if(response.data){
+                $('#like_count').empty();
+                let str = `
+                <i class='bx bx-heart' onclick = "likedocument(${response.data.id})" ></i>
+                <div>${response.data.like_count}</div>
+                `;
+                $('#like_count').append(str);
+            }
+            // Kiểm tra xem dữ liệu phản hồi có phải là null không
+            
+        },
+        error: function (error) {
+            console.log(error);
+        },
+
+    });
+}
+function likedocument(document_id){
+    const user_id = document.getElementById(`user_id`).value; 
+    const own_id = document.getElementById('own_id').value;
+    console.log(user_id);
+    $.ajax({
+        type: "POST",
+        url: `http://localhost:8001/api/v1/like/document`,
+        headers: {
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify({
+            user_id: user_id,
+            document_id: document_id,
+            own_id: own_id
+            
+        }),
+        success: function (response) {
+           // console.log(response);
+           
+            loadDocument();
+        },
+        error: function (error) {
+            console.log(error);
+        },
+
+    });
+}
+function download_file(document_id,id, path){
+   
+    try {
+        const loading = document.getElementById('showloading');
+        loading.style.display = 'block';
+        $.ajax({
+        url: `http://localhost:8001/api/v1/download-file`,
+        method: "POST",
+        dataType: "json",
+        data: {document_id: document_id, id: id,path: path},
+        success: function(data) {
+            
+        alert(data.message);
+        loading.style.display = "none";               
+        },
+        error: function(err) {
+            
+        alert(err.responseText);
+        }
+    });
+    } catch (error) {
+        
+    } finally{
+        loading.style.display = "none";
+    }
+    
+}
+function countTime(created_at_string) {
+    let created_at = new Date(created_at_string);
+    let now = new Date();
+
+    let timeDifference = now - created_at; // Khoảng thời gian ở dạng miligisecond
+
+    let minutesDifference = Math.floor(timeDifference / (1000 * 60)); // Chuyển đổi sang phút
+    let hoursDifference = Math.floor(timeDifference / (1000 * 60 * 60)); // Chuyển đổi sang giờ
+    let daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24)); // Chuyển đổi sang ngày
+
+    let result;
+
+    if (daysDifference > 0) {
+        result = daysDifference + (daysDifference === 1 ? " ngày trước" : " ngày trước");
+    } else if (hoursDifference > 0) {
+        result = hoursDifference + (hoursDifference === 1 ? " giờ trước" : " giờ trước");
+    } else {
+        result = minutesDifference + (minutesDifference === 1 ? " phút trước" : " phút trước");
+    }
+
+    return result;
+}
+function loadDocumentByTypeID(){
+    const type_id = document.getElementById('type_id').value;
+      $.ajax({
+        type: "GET",
+        url: "http://localhost:8001/api/v1/documents/getbytype"+ "?id="+type_id+"&limit=4",
+
+        success: function (response) {
+            // Kiểm tra xem dữ liệu phản hồi có phải là null không
+            if (response.data != null) {
+                console.log(response.data);
+                
+                for (const document of response.data) {
+                  let str = `
+                  <div class="mb-3" >
+                    <input type="text" value="${document.link}" hidden class="link_file">
+                    
+
+                        <div class="card bg-white border-white border-0">
+                          <a aria-label="${document.title}" data-cooltipz-dir="bottom" href="/document/view/${document.id}" onclick = "handleViewDocument(${document.id})">
+                            <div class = "d-flex justify-content-center">
+                              <img class="card-custom-img" id="pdfImage1${document.id}" alt="PDF to Image">
+                              
+                            </div>
+                            <div class="title">
+                              <div class="d-flex align-items-center justify-content-between">
+                                <span class ="text_size">${shortenTextByWords(document.title,10)}</span>
+                              </div> 
+                            
+                           
+                          </div>
+                          </a>
+                          <div class="" style="background: inherit; border-color: inherit;">
+                            <div class="d-flex align-items-center m-2" >
+                                <div class="d-flex align-items-center" style = "margin-right:10px">
+                                    <i class='bx bx-heart'></i>
+                                    <div class="text-muted">${document.like_count}</div>
+                                </div>
+                                <div class="d-flex align-items-center" style = "margin-right:10px">
+                                  <i class='bx bx-memory-card'></i>
+                                  <div class="text-muted"> ${document.file_type}</div>
+                                </div>
+                                <div class="d-flex align-items-center" style = "margin-right:10px">
+                                    <i class='bx bxs-download' ></i>
+                                    <div class="text-muted">${document.download_count}</div>
+                                </div> 
+                                <div class="d-flex align-items-center" style = "margin-right:10px">
+                                    <i class='bx bx-show'></i>
+                                    <div class="text-muted">${document.view_count}</div>
+                                </div>
+                                
+                            </div>
+                          </div>
+                            
+                            
+                            
+                                
+                            
+                        </div>
+                          
+                        
+                    </div>
+                `;
+                $('#list_document').append(str);
+                }   
+                for (const document of response.data) {
+                  displayFirstPage(document.link, "pdfImage1"+document.id);
+                }          
+            }
+            else{
+            }
+        },
+        error: function (error) {
+            console.log(error);
+        },
+    });
+}
+loadDocumentByTypeID();
+function loadDocumentByUserID(){
+    const user_id = document.getElementById('own_id').value;
+    console.log(user_id);
+      $.ajax({
+        type: "GET",
+        url: "http://localhost:8001/api/v1/documents/get-by-user"+ "?id="+user_id+"&limit=5",
+
+        success: function (response) {
+            // Kiểm tra xem dữ liệu phản hồi có phải là null không
+            if (response.data != null) {
+                console.log(response.data);
+                document.getElementById('text_list_document_user').style.display = 'block';
+                for (const document of response.data) {
+                  let str = `
+                  <div class="mb-3" >
+                    <input type="text" value="${document.link}" hidden class="link_file">
+                    
+
+                        <div class="card bg-white border-white border-0">
+                          <a aria-label="${document.title}" data-cooltipz-dir="bottom" href="/document/view/${document.id}" onclick = "handleViewDocument(${document.id})">
+                            <div class = "d-flex justify-content-center">
+                              <img class="card-custom-img" id="pdfImage${document.id}" alt="PDF to Image">
+                              
+                            </div>
+                            <div class="title">
+                              <div class="d-flex align-items-center justify-content-between">
+                                <span class ="text_size">${shortenTextByWords(document.title,10)}</span>
+                              </div> 
+                            
+                           
+                          </div>
+                          </a>
+                          <div class="" style="background: inherit; border-color: inherit;">
+                            <div class="d-flex align-items-center m-2" >
+                                <div class="d-flex align-items-center" style = "margin-right:10px">
+                                    <i class='bx bx-heart'></i>
+                                    <div class="text-muted">${document.like_count}</div>
+                                </div>
+                                <div class="d-flex align-items-center" style = "margin-right:10px">
+                                  <i class='bx bx-memory-card'></i>
+                                  <div class="text-muted"> ${document.file_type}</div>
+                                </div>
+                                <div class="d-flex align-items-center" style = "margin-right:10px">
+                                    <i class='bx bxs-download' ></i>
+                                    <div class="text-muted">${document.download_count}</div>
+                                </div> 
+                                <div class="d-flex align-items-center" style = "margin-right:10px">
+                                    <i class='bx bx-show'></i>
+                                    <div class="text-muted">${document.view_count}</div>
+                                </div>
+                                
+                            </div>
+                          </div>
+                            
+                            
+                            
+                                
+                            
+                        </div>
+                          
+                        
+                    </div>
+                `;
+                $('#list_document_user').append(str);
+                }   
+                for (const document of response.data) {
+                  displayFirstPage(document.link, "pdfImage"+document.id);
+                }          
+            }
+            else{
+            }
+        },
+        error: function (error) {
+            console.log(error);
+        },
+    });
+}
+loadDocumentByUserID();
+const link = document.getElementById('link').value;
+
+const pdfUrl = 'http://localhost:8001/img/' + link;
+const loadingTask = pdfjsLib.getDocument(pdfUrl);
+console.log(pdfUrl);
+
+    // Khởi tạo PDF.js
+    
+
+    // loadingTask.promise.then(pdf => {
+    //   const totalPages = pdf.numPages;
+    //   const pagesToShow = Math.min(10, totalPages);  // Chỉ hiển thị số trang có sẵn hoặc 10 trang
+
+    //   const pagesPromises = [];
+    //   for (let pageNum = 1; pageNum <= pagesToShow; pageNum++) {
+    //     pagesPromises.push(pdf.getPage(pageNum));
+    //   }
+    //   return Promise.all(pagesPromises);
+    // }).then(pages => {
+    //   const pdfContainer = document.getElementById('pdfContainer');
+
+    //   pages.forEach((page, index) => {
+    //     const viewport = page.getViewport({ scale: 1 });
+        
+    //     // Tạo canvas cho từng trang
+    //     const canvas = document.createElement('canvas');
+    //     canvas.height = viewport.height;
+    //     canvas.width = viewport.width;
+    //     pdfContainer.appendChild(canvas);
+
+    //     const context = canvas.getContext('2d');
+        
+    //     // Vẽ nội dung của trang
+    //     page.render({
+    //       canvasContext: context,
+    //       viewport: viewport
+    //     }).promise.then(() => {
+    //       // Làm mờ toàn bộ nội dung từ trang số 2 trở đi
+    //       if (index >= 5) { // Chỉ làm mờ từ trang thứ 2 trở đi (index bắt đầu từ 0)
+    //         context.globalAlpha = 1;  // Đặt độ trong suốt để làm mờ nội dung
+    //         context.fillStyle = "white";
+    //         context.fillRect(0, 0, canvas.width, canvas.height);
+            
+    //         // context.globalAlpha = 1.0;  // Đặt lại độ trong suốt cho chữ
+    //       }
+
+    //       // Viết chữ 'tailieu' màu đỏ chéo
+    //       context.font = "bold 48px Arial";
+    //       context.fillStyle = "red";
+    //       context.translate(canvas.width / 2, canvas.height / 2);
+    //       context.rotate(-Math.PI / 4);  // Xoay chữ 45 độ
+    //       context.fillText("tailieu", -context.measureText("tailieu").width / 2, 0);
+    //       context.setTransform(1, 0, 0, 1, 0, 0);  // Đặt lại transform
+    //       context.strokeStyle = 'black';  // Adjust border color as needed
+    //     context.lineWidth = 2;        // Adjust border width as needed
+    //     context.strokeRect(0, 0, canvas.width, canvas.height);
+    //     context.font = "bold 12px Arial";
+    //   context.fillStyle = "black";
+    //   context.textAlign = "center";
+    //   context.fillText(`Trang ${index + 1}`, canvas.width / 2, canvas.height - 10);
+    //     });
+    //   });
+    // }).catch(error => {
+    //   console.error('Lỗi khi tải PDF: ', error);
+    // });
+    let pdfDoc = null;
+    let currentPage = 1;
+    const pagesToShow = 5;
+    let clickCounter = 0; // Counter for button clicks
+    //const loadingTask = pdfjsLib.getDocument(url);
+
+    loadingTask.promise.then(pdf => {
+      pdfDoc = pdf;
+      loadPages();
+    }).catch(error => {
+      console.error('Error loading PDF: ', error);
+    });
+
+    function loadPages() {
+      const totalPages = pdfDoc.numPages;
+      document.getElementById("output").textContent = "Số trang: "+totalPages;
+      const pagesToLoad = Math.min(currentPage + pagesToShow - 1, totalPages);
+
+      const pagesPromises = [];
+      for (let pageNum = currentPage; pageNum <= pagesToLoad; pageNum++) {
+        pagesPromises.push(pdfDoc.getPage(pageNum));
+      }
+
+      Promise.all(pagesPromises).then(pages => {
+        const pdfContainer = document.getElementById('pdfContainer');
+
+        pages.forEach((page, index) => {
+          const viewport = page.getViewport({ scale: 1 });
+
+          // Create canvas for each page
+          const canvas = document.createElement('canvas');
+          canvas.height = viewport.height;
+          canvas.width = viewport.width;
+          pdfContainer.appendChild(canvas);
+
+          const context = canvas.getContext('2d');
+       
+
+          // Render page content
+          page.render({
+            canvasContext: context,
+            viewport: viewport
+          }).promise.then(() => {
+            // Blur content for pages after the first 5 pages
+            // if (currentPage + index > 5) {
+            //   context.globalAlpha = 0.5;
+            //   context.fillStyle = "white";
+            //   context.fillRect(0, 0, canvas.width, canvas.height);
+            // }
+
+            // Write 'tailieu' diagonally in red
+            // context.font = "bold 48px Arial";
+            // context.fillStyle = "red";
+            // context.translate(canvas.width / 2, canvas.height / 2);
+            // context.rotate(-Math.PI / 4);
+            // context.fillText("tailieu", -context.measureText("tailieu").width / 2, 0);
+            // context.setTransform(1, 0, 0, 1, 0, 0);
+               context.font = "bold 48px Arial";
+          context.fillStyle = "rgba(173, 216, 230, 0.5)"; // Light blue color with some transparency
+          context.translate(canvas.width / 2, canvas.height / 2);
+          context.rotate(-Math.PI / 4);
+          context.fillText("document", -context.measureText("document").width / 2, 0);
+          context.setTransform(1, 0, 0, 1, 0, 0);
+
+            // Add border and page number
+            context.strokeStyle = 'black';
+            context.lineWidth = 2;
+            context.strokeRect(0, 0, canvas.width, canvas.height);
+            context.font = "bold 12px Arial";
+            context.fillStyle = "black";
+            context.textAlign = "center";
+            context.fillText(`Trang ${currentPage + index - pagesToShow }`, canvas.width / 2, canvas.height - 10);
+          });
+        });
+
+        currentPage += pagesToShow;
+
+        // Show the "See More" button if there are more pages to load
+        if (currentPage <= totalPages  && clickCounter < 2) {
+          document.getElementById('seeMoreButton').style.display = 'block';
+        } else {
+          document.getElementById('seeMoreButton').style.display = 'none';
+          document.getElementById('text_more').style.display = 'block';
+        }
+      });
+    }
+
+    document.getElementById('seeMoreButton').addEventListener('click', () => {
+      clickCounter++;
+      loadPages();
+    });
+    let selectedLabel = '';
+    document.querySelectorAll('input[name="bad_type"]').forEach((elem) => {
+            elem.addEventListener("change", function(event) {
+               
+                selectedLabel = document.querySelector(`label[for="${event.target.id}"]`).innerText;
+                console.log("Ban da chon: " + selectedLabel)
+            });
+        });
+    function report(report_reason){
+        const user_id = document.getElementById(`user_id`).value; 
+        const document_id = document.getElementById(`document_id`).value;
+       
+        $.ajax({
+            type: "POST",
+            url: `http://localhost:8001/api/v1/report` ,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify({
+                user_id: user_id,
+                document_id: document_id,
+                report_reason: report_reason
+            }),
+            success: function (response) {
+            
+                // Kiểm tra xem dữ liệu phản hồi có phải là null không
+            console.log(response.message);
+            alert(response.message);
+            location.reload();
+            //getcomment();
+            },
+            error: function (error) {
+                console.log(error);
+                //getcomment();
+            },
+        });
+}
+document.getElementById('okButton').addEventListener('click', function() {
+            if (selectedLabel) {
+                report(selectedLabel);
+            } else {
+                alert('Vui lòng chọn một lý do báo xấu.');
+            }
+        });
+function displayFirstPage(pdfFilePath, imgId) {
+  const pdfUrl = 'http://localhost:8001/img/' + pdfFilePath;
+            const img = document.getElementById(imgId);
+
+            // Khởi tạo PDFJS
+            pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
+                // Lấy trang đầu tiên
+                pdf.getPage(1).then(page => {
+                    const scale = 1.5;
+                    const viewport = page.getViewport({ scale });
+
+                    // Tạo canvas để vẽ trang PDF
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                   
+
+                    // Vẽ trang PDF lên canvas
+                    page.render({
+                        canvasContext: context,
+                        viewport: viewport
+                    }).promise.then(() => {
+                        // Chuyển đổi canvas thành ảnh và hiển thị trong thẻ img
+                        const imgData = canvas.toDataURL('image/jpeg');
+                        
+                          img.src = imgData;
+                        
+                       
+                          
+                        
+                        
+                    });
+                });
+            }).catch(error => {
+              img.src = "http://localhost:8001/asset/img/document.jpg";
+});
+}
+</script>
+<!-- <script src="/asset/js/script/documentdetail.js"></script> -->

@@ -1,0 +1,230 @@
+<%- include('partials/head.ejs') %>
+<div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+        <%- include('partials/sidebar.ejs') %>
+        <div class="layout-page">
+            <%- include('partials/nav.ejs') %>
+            <div class="content-wrapper">
+                <!-- Content -->
+    
+                <div class="container-xxl flex-grow-1 container-p-y">
+                  
+                   
+                    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Danh sách /</span> Báo cáo vi phạm từ người dùng</h4>
+                    
+                    <div class="card">
+                    
+                        <% if(check==true){ %>
+                            <h5 class="card-header">Phản hồi ( <%= num %>)</h5>
+                            <div class="table-responsive text-nowrap">
+                            <table class="table table-striped table-sm" id="usersTable">
+                    
+                                <thead>
+                                  <tr>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Người báo cáo vi phạm </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Tài liệu vi phạm </th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Lý do vi phạm</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Thời gian</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Trạng thái</th>  
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Thao tác</th> 
+                                  </tr>
+                                </thead>
+                            
+                                <tbody>
+                                  <% data.forEach(entry => { %>
+                                    <tr>
+                                      <td class="text-secondary text-xs font-weight-bold ">
+                                        <div class="text-center">
+                                          <%= entry.id %>
+                                        </div>
+                                      </td>
+                                      <td class="text-secondary text-xs font-weight-bold ">
+                                        <div class="text-center">
+                                            <a class="" data-bs-toggle="modal" data-bs-target="#basicModal<%= entry.id %>" style="cursor: pointer;">
+                                                <%= entry.full_name %>
+                                            </a>
+                                              <div class="modal fade" id="basicModal<%= entry.id %>" tabindex="-1" style="display: none;" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                  <form action="">
+                                                    <input type="text" value="<%= entry.id %>" name="post_id" id="post_id<%= entry.id %>" hidden>
+                                                    <div class="modal-content">
+                                                      <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel1">Xóa bản ghi ID <%= entry.id %> </h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                      </div>
+                                                      <div class="modal-body">
+                                                        <p>
+                                                          Bạn có chắc chắn muốn xóa phản hồi này !
+                                                        </p>
+                                                      </div>
+                                                      <div class="modal-footer">
+                                                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                                          Đóng
+                                                        </button>
+                                                        <button type="button" class="btn btn-primary" id="changepass" onclick="deleteFeedback('<%= entry.id %>')" >Xác nhận</button>
+                                                      </div>
+                                                    </div>
+                                                  </form>
+                                                  
+                                                </div>
+                                              </div>
+                                        </div>
+                                      </td>
+                                      <td class="text-secondary text-xs font-weight-bold ">
+                                        <div class="text-center">
+                                          <%= entry.title %>
+                                        </div>
+                                      </td>
+                                      <td class="text-secondary text-xs font-weight-bold ">
+                                        <div class="text-center">
+                                          <%= entry.report_reason %>
+                                        </div>
+                                      </td>
+                                      <td class="text-secondary text-xs font-weight-bold ">
+                                        <div class="text-center">
+                                          <%= moment(entry.report_date).format('DD/MM/YYYY'); %>
+                                        </div>
+                                      </td>
+                                      <td class="text-secondary text-xs font-weight-bold ">
+                                        <div class="text-center">
+                                          <%= entry.status %>
+                                        </div>
+                                      </td>
+                                      <!-- <td class="text-secondary text-xs font-weight-bold ">
+                                        <button id="resolveButton<%= entry.id %>" class="btn btn-sm rounded-pill btn-info" onclick="reviewReport('<%= entry.id %>')">Review</button>
+                                        <div id="spinner<%= entry.id %>" class="spinner-border text-info" role="status" style="display:none;">
+                                          <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                        <button id="resolveButton<%= entry.id %>" class="btn btn-sm rounded-pill btn-success" button onclick="resolveReport('<%= entry.id %>')">Resolve</button>
+                                        <div id="spinner<%= entry.id %>" class="spinner-border text-success" role="status" style="display:none;">
+                                          <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                      </td> -->
+                                      
+                                    </tr>
+                                   
+                                <% }) %>
+                                </tbody>
+                              </table>
+                              <div class="d-flex justify-content-center mt-3">
+                                <ul class="pagination">
+                                  <% if(page > 1) { %><li class="page-item"><a class="page-link" href="/admin/reportresolve/?page=<%=page-1%>"><i class="tf-icon bx bx-chevron-left"></i></a> <% } %></li> 
+                                  <% for(let i = iterator; i <= endingLink; i++) { %>
+                                      <% if(i === page) { %>
+                                        <li class="page-item active">
+                                          <a class="page-link" href="/admin/reportresolve/?page=<%=i%>"><%=i%></a>
+                                        </li>
+                                      
+                                      <% continue; %>
+                                  <% } %>
+                                      <li class="page-item">
+                                        <a class="page-link" href="/admin/reportresolve/?page=<%=i%>"><%=i%></a>
+                                      </li>
+                                      
+                                      <% } %>
+                                      <% if(page < numberOfPages) { %> 
+                                        <li class="page-item">
+                                          <a class="page-link" href="/admin/reportresolve/?page=<%=page+1%>">
+                                            <i class="tf-icon bx bx-chevron-right"></i>
+                                        </a> 
+                                        </li>
+                                       
+                                        <% } %>
+                                </ul>
+                              </div>
+                        <% }else{ %>
+                            <p class="p-3">Không có dữ liệu</p>
+                        <% } %>
+                    </div>
+                  
+                    
+                  <!-- Basic Bootstrap Table -->
+                    
+                </div>
+
+    
+                  <hr class="my-5">
+                  
+                
+              
+              </div>
+        </div>
+    </div>
+</div>       
+
+<%- include('partials/footer.ejs') %>
+<script>
+  function deleteFeedback(id){
+  $.ajax({
+                url: `http://localhost:8001/api/v1/feedback/del`,
+                method: "POST",
+                dataType: "json",
+                data: {id:id},
+                success: function(response) {
+                    alert("Xóa thành công");
+                        window.location.href = "/admin/feedback";
+                    
+                    
+                },
+                error: function(err) {
+                   alert(err.responseText);
+                }
+            });
+}
+async function reviewReport(reportId) {
+  const spinner = document.getElementById('spinner'+reportId);
+  const resolveButton = document.getElementById('resolveButton'+reportId);
+          
+  // Hiển thị spinner và ẩn nút khi gọi API
+  spinner.style.display = 'inline-block';
+  resolveButton.style.display = 'none';
+  try {
+    const response = await fetch(`http://localhost:8001/api/v1/admin/reports/${reportId}/review`, {
+    method: 'POST'
+    });
+
+    if (response.ok) {
+      alert('Report reviewed successfully.');
+                
+    } else {
+      alert('Error reviewing report.');
+    }
+  } catch (error) {
+    alert(error.message);
+  } finally {
+    // Ẩn spinner và hiển thị nút sau khi hoàn thành API call
+    spinner.style.display = 'none';
+    resolveButton.style.display = 'inline-block';
+  }          
+}
+
+        async function resolveReport(reportId) {
+          const spinner = document.getElementById('spinner'+reportId);
+          const resolveButton = document.getElementById('resolveButton'+reportId);
+          
+          // Hiển thị spinner và ẩn nút khi gọi API
+          spinner.style.display = 'inline-block';
+          resolveButton.style.display = 'none';
+
+          try {
+              const response = await fetch(`http://localhost:8001/api/v1/admin/reports/${reportId}/resolve`, {
+                  method: 'POST'
+              });
+
+              if (response.ok) {
+                  alert('Report resolved and notifications sent successfully.');
+              } else {
+                  throw new Error('Error resolving report.');
+              }
+          } catch (error) {
+              alert(error.message);
+          } finally {
+              // Ẩn spinner và hiển thị nút sau khi hoàn thành API call
+              spinner.style.display = 'none';
+              resolveButton.style.display = 'inline-block';
+          }
+      }
+
+        
+</script>

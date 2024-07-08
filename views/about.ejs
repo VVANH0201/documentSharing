@@ -1,0 +1,112 @@
+<%- include('partials/head.ejs') %>
+<%- include('partials/sidebar.ejs') %>
+<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
+  <%- include('partials/header.ejs') %>
+  <div class="container-fluid py-4">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
+        <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Admin</a></li>
+        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Users Manager</li>
+      </ol>
+      
+    </nav>
+    <div class="row">
+      <div class="col-12">
+        <div class="card mb-4">
+          <div class="card-header pb-0">
+            <%= user.email %>
+            <h6>User table</h6>
+          </div>
+          <div class="card-body px-0 pt-0 pb-2">
+            <div class="table-responsive p-0">
+              <table class="table table-striped table-sm" id="usersTable">
+               
+                <thead>
+                  <tr>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Full Name</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Email</th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Avatar</th>
+                    
+                  </tr>
+                </thead>
+            
+                <tbody>
+                  <% data.forEach(entry => { %>
+                    <tr>
+                      <td class="text-secondary text-xs font-weight-bold ">
+                        <div class="text-center">
+                          <%= entry.id %>
+                        </div>
+                      </td>
+                      <td class="text-secondary text-xs font-weight-bold ">
+                        <div class="text-center">
+                          <%= entry.full_name %>
+                        </div>
+                      </td>
+                      <td class="text-secondary text-xs font-weight-bold ">
+                        <div class="text-center">
+                          <%= entry.email %>
+                        </div>
+                      </td>
+                      <td class="text-secondary text-xs font-weight-bold ">
+                        <div class="text-center">
+                          <%= entry.avatar_url %>
+                        </div>
+                      </td>
+                      
+                     
+                      
+                      <td class="text-end">
+                        
+                        <div class="d-flex flex-row justify-content-end gap-2">  
+                          <a href="/view/<%= entry.id %>" class="btn btn-small btn-primary">View</a>
+                          </form>   
+                          <form action="/edit/<%= entry.id %>?_method=DELETE" method="POST" class="position-relative">
+                            <button type="submit" class="btn btn-danger btn-small">
+                              Delete
+                              <i class="bi bi-person-x"></i>
+                            </button>
+                          </form>
+              
+                        </div>
+              
+              
+                      </td>
+                    </tr>
+                   
+                <% }) %>
+                </tbody>
+              </table>
+              <ul class="pagination">
+                <% if(page > 1) { %><li class="page-item"><a class="page-link" href="/about/?pageuser=<%=page-1%>">Before</a> <% } %></li> 
+                <% for(let i = iterator; i <= endingLink; i++) { %>
+                    <% if(i === page) { %>
+                      <li class="page-item">
+                        <a class="page-link" href="/about/?pageuser=<%=i%>"><%=i%></a>
+                      </li>
+                    
+                    <% continue; %>
+                <% } %>
+                    <li class="page-item">
+                      <a class="page-link" href="/about/?pageuser=<%=i%>"><%=i%></a>
+                    </li>
+                    
+                    <% } %>
+                    <% if(page < numberOfPages) { %> 
+                      <li class="page-item">
+                        <a class="page-link" href="/about/?pageuser=<%=page+1%>">After</a> 
+                      </li>
+                     
+                      <% } %>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</main>
+<%- include('partials/footer.ejs') %>
+
+
+

@@ -1,0 +1,148 @@
+
+<%- include('partials/head.ejs') %>
+<!-- Layout wrapper -->
+<div class="container-fluid">
+    <%- include('partials/header.ejs') %>
+    <div class="content-wrapper">
+            <!-- Content -->
+        <div class="container-xxl flex-grow-1 container-p-y">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-style1">
+                  <li class="breadcrumb-item">
+                    <a href="/home">Trang chủ</a>
+                  </li>
+                  <li class="breadcrumb-item">
+                    <a href="/tag/<%= tag.id %>"> <%= tag.name_tag %></a>
+                  </li>
+                 
+                </ol>
+            </nav>
+            
+            <div class="row d-flex justify-content-between">
+                <div class=" card mt-3 col-lg-8 col-md-8" style="padding: 0px;">
+                    <% if(check === true){ %>
+                      <p class="title1">Danh sách bài viết theo tag: <%= tag.name_tag %></p>
+                      <% data.forEach(entry => { %>
+                          <div class="d-flex mb-3 p-3">
+                              <div class="flex-shrink-0">
+                                <img src="/img/<%= entry.avatar_url %>"  class="me-3" height="30">
+                              </div>
+                              <div class="flex-grow-1 row">
+                                <div class="col-12  mb-sm-0 mb-2">
+                                  <div class="d-flex">
+                                    <h5 class="mb-0" style="color: rgb(69, 84, 244);"><%= entry.full_name %></h5>
+                                    <h5 class="text-muted " style="margin-left: 5px;" data-bs-toggle="tooltip" data-bs-offset="0,4" data-bs-placement="bottom" data-bs-html="true" title="" 
+                                      data-bs-original-title="  <%=  moment(entry.created_at).format('DD/MM/YYYY'); %>">
+                                      <span> <%=  moment(entry.created_at).format('DD/MM/YYYY'); %> %></span>
+                                    </h5>
+                                    
+                                  </div>
+                                  <div class="row">
+                                    <div class="col-md">
+                                      <a href="/post/<%= entry.id%>">
+                                        <h5 ><%= entry.title %></h5>
+                                      </a>
+                                      
+                                    </div>
+      
+                                    <!-- <div class="col-6 load <%= entry.id %>" id="type<%= entry.id %>" onload="loadtype(('<%= entry.id %>'))">
+                                      
+                                    </div> -->
+                                    
+                                  </div>
+                                  <div class="d-flex">
+                              
+                                    <p>
+                                      <i class='bx bx-heart'></i>
+                                      <span><%= entry.like_count %></span>
+                                    </p>
+                                  </div>
+                                  <hr class="m-0">
+                                  
+                                </div>
+                                <!-- <div class="col-4 col-sm-5 text-end">
+                                  <button type="button" class="btn btn-icon btn-outline-secondary">
+                                    <i class="bx bx-link-alt"></i>
+                                  </button>
+                                </div> -->
+                              </div>
+                            </div>
+                      <% }) %>
+                           
+                      <div class="d-flex justify-content-center">
+                        <ul class="pagination">
+                          <% if(page > 1) { %><li class="page-item"><a class="page-link" href="/tag/<%= tagid%>?page=<%=page-1%>"><i class="tf-icon bx bx-chevron-left"></i></a> <% } %></li> 
+                          <% for(let i = iterator; i <= endingLink; i++) { %>
+                              <% if(i === page) { %>
+                                <li class="page-item active">
+                                  <a class="page-link" href="/tag/<%= tagid%>?page=<%=i%>"><%=i%></a>
+                                </li>
+                              
+                              <% continue; %>
+                          <% } %>
+                              <li class="page-item">
+                                <a class="page-link" href="/tag/<%= tagid%>?page=<%=i%>"><%=i%></a>
+                              </li>
+                              
+                              <% } %>
+                              <% if(page < numberOfPages) { %> 
+                                <li class="page-item">
+                                  <a class="page-link" href="/tag/<%= tagid%>?page=<%=page+1%>"> <i class="tf-icon bx bx-chevron-right"></i></a> 
+                                </li>
+                               
+                                <% } %>
+                        </ul>
+                      </div>    
+                    <% } else{ %>
+                      <p>Không có dữ liệu</p>
+                    <% } %>  
+                    
+                </div>
+                <div class="card mt-3  col-lg-3 col-md-4 " style="padding: 0px;">
+                    <div class="title1">Tag</div>
+                    <hr class="m-0">
+                     <div id="list_tags">
+                       
+                     </div>
+    
+                     
+                </div>
+            </div>
+            
+            
+        </div>
+    </div>      
+          
+</div>            
+<%- include('partials/footer.ejs') %>
+
+<script>
+  function shortenHtmlText(htmlText, maxLength) {
+  let tempElement = document.createElement('div');
+  tempElement.innerHTML = htmlText;
+
+  let text = tempElement.textContent || tempElement.innerText || '';
+
+  if (text.length <= maxLength) {
+    return htmlText;
+  } else {
+    let shortText = text.substring(0, maxLength - 3) + "...";
+    tempElement.textContent = shortText;
+    return tempElement.innerHTML;
+  }
+}
+function shortenTextByWords(text, maxWords) {
+  // Tách văn bản thành các từ dựa trên khoảng trắng
+  let words = text.split(/\s+/);
+  
+  // Nếu số từ ít hơn hoặc bằng số từ tối đa, trả về văn bản gốc
+  if (words.length <= maxWords) {
+    return text;
+  }
+
+  // Lấy 50 từ đầu tiên và thêm dấu ba chấm
+  let shortenedText = words.slice(0, maxWords).join(' ') + '...';
+
+  return shortenedText;
+}
+</script>

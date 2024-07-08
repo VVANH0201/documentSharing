@@ -1,0 +1,92 @@
+<footer class="content-footer footer bg-footer-theme " >
+    <div class="container-xxl  card mt-2 p-4">
+        
+        <div class="row d-flex justify-content-center">
+            
+            <div class="col-lg-4 ">
+                <h5 class=" mb-3">Thông tin</h5>
+                <ul class="list-unstyled text-muted">
+                    <li><a href="#">Về chúng tôi</a></li>
+                    <li><a href="#">Quy định bảo mật</a></li>
+                    <li><a href="#">Quy chế hoạt động</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-4 ">
+                <h5 class=" mb-3">Trợ giúp</h5>
+                <ul class="list-unstyled text-muted">
+                    <li><a href="#">Hướng dẫn sử dụng</a></li>
+                    <li><a href="#">Upload tài liệu</a></li>
+                    <li><a href="#">Hỏi và đáp</a></li>
+                   
+                </ul>
+            </div>
+            <div class="col-lg-4">
+                <h5 class=" mb-3">Theo dõi chúng tôi</h5>
+                
+              
+                    <div class="input-group mb-3">
+                        <div class="flex-shrink-0">
+                            <img src="/asset/img/icons/brands/facebook.png" alt="facebook" class="me-3" height="40">
+                          </div>
+                          <div class="flex-shrink-0">
+                            <img src="/asset/img/icons/brands/instagram.png" alt="facebook" class="me-3" height="40">
+                          </div>
+                          <div class="flex-shrink-0">
+                            <img src="/asset/img/icons/brands/twitter.png" alt="facebook" class="me-3" height="40">
+                          </div>
+                       
+                    </div>
+               
+            </div>
+        </div>
+       
+      
+    </div>
+</footer>
+
+
+<!-- Core JS -->
+<!-- build:js assets/vendor/js/core.js -->
+<!-- <script src="/asset/vendor/libs/jquery/jquery.js"></script>
+<script src="/asset/vendor/libs/popper/popper.js"></script> -->
+<script src="/asset/vendor/js/bootstrap.js"></script>
+<script src="/asset/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+<script src="/asset/js/toast-notification.js"></script>
+<script src="/asset/vendor/js/menu.js"></script>
+<link rel="stylesheet" href="/asset/css/slick.css">
+
+<!-- endbuild -->
+
+<!-- Vendors JS -->
+
+<!-- Main JS -->
+<script src="/asset/js/main.js"></script>
+<script src="/asset/js/pages-account-settings-account.js"></script>
+<!-- Page JS -->
+
+<!-- Place this tag in your head or just before your close body tag. -->
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+<script>
+    function addnewfeedback(){
+        const user_id = document.getElementById('userid').value;
+        const content = document.getElementById('content').value;
+        $.ajax({
+                url: `http://localhost:8001/api/v1/feedback/addnew`,
+                method: "POST",
+                dataType: "json",
+                data: {content:content,user_id:user_id},
+                success: function(response) {
+                    alert('Gửi phản hồi thành công');
+                    
+                    
+                },
+                error: function(err) {
+                   alert(err.responseText);
+                }
+            });
+
+    }
+</script>
+</body>
+</html>

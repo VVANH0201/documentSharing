@@ -1,0 +1,101 @@
+<%- include('partials/head.ejs') %>
+<div class="layout-wrapper layout-content-navbar">
+    <div class="layout-container">
+        <%- include('partials/sidebar.ejs') %>
+        <div class="layout-page">
+            <%- include('partials/nav.ejs') %>
+            <div class="content-wrapper">
+                <!-- Content -->
+    
+                <div class="container-xxl flex-grow-1 container-p-y">
+                    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Thêm mới bài viết
+                        <div class="card">
+                            <div class="card-body">
+                                <form action="/admin/addPost" enctype="multipart/form-data"  method="POST" >
+                                    <input type="text" value="<%= user.id  %>" name="user_id" id="" hidden>
+                                    <div class="mb-3">
+                                        <label for="" class="form-label">Tên bài viết</label>
+                                        <input class="form-control" type="text"
+                                                              id="tentailieu"
+                                                              name="title"
+                                                            />
+                                      </div>
+                                      <div class="mb-3">
+                                          <label  class="form-label">Thẻ tag(Tối đa 3 cái)</label>
+                                          <select name="tag[]" id="tag" class="form-control multi" multiple>
+                                              <!-- <option selected="">Open this select menu</option> -->
+                                              <% for(var count = 0; count < tag.length; count++) { %>
+                                  
+                                              <option value="<%= tag[count].id %>"><%= tag[count].name_tag %></option>
+                                  
+                                              <% } %>
+                                          </select>
+                                      </div>
+                                      <div class="mb-3">
+                                          <label for="formFile" class="form-label">Chọn ảnh</label>
+                                          <input class="form-control" type="file" id="file" name="file">
+                                          <img src="" id="image-preview" alt="">
+                                      </div>
+                                      <div class="mb-3">
+                                        <label for="" class="form-label">Nội dung</label>
+                                        <textarea name="content" id="content" cols="30" rows="10"></textarea>
+                                      </div>
+                                     
+                                      <div class="mb-3">
+                                        <input class="btn btn-primary" type="submit" value="Xác nhận"/>
+                                      </div>
+                                </form>
+                                
+                            </div>
+                        </div>
+                 
+
+    
+                    <hr class="my-5">
+    
+                
+              
+              </div>
+        </div>
+    </div>
+</div>        
+
+<%- include('partials/footer.ejs') %>
+<style>
+    #image-preview {
+        width: 200px;
+        height: 200px;
+        border: 1px solid #ccc;
+        margin: 10px;
+    }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/js/select2.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.10/css/select2.min.css" rel="stylesheet"/>
+<script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+<script>
+    CKEDITOR.replace('content');
+</script>
+<script>
+    $('.multi').select2({
+       
+    });
+</script>
+<script>
+    const imageFile = document.getElementById('file');
+    const imagePreview = document.getElementById('image-preview');
+    imagePreview.hidden = true;
+    imageFile.addEventListener('change', function() {
+        imagePreview.hidden = false;
+        if (this.files && this.files[0]) {
+            
+            const file = this.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+            };
+
+            reader.readAsDataURL(file);
+        }
+    });
+</script>

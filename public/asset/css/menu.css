@@ -1,0 +1,50 @@
+#menu-container ul {
+    list-style-type: none;
+    padding-left: 20px;
+    margin: 0;
+    padding-right: 20px;
+}
+
+#menu-container li {
+    margin: 5px 0;
+    padding: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-bottom: 1px solid #abeffb;  /* Thêm gạch dưới */
+}
+
+#menu-container li:hover {
+    background-color: #abeffb;
+}
+
+#menu-container li > ul {
+    display: none;
+    margin-left: 15px;
+    padding-left: 10px;
+    border-left: 2px solid #abeffb;
+    
+}
+
+#menu-container li.expanded > ul {
+    display: block;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px;
+}
+
+.menu-item a {
+    text-decoration: none;
+    color: inherit;
+    flex-grow: 1;
+}
+.arrow {
+    transition: transform 0.3s ease;
+}
+
+.arrow.expanded {
+    transform: rotate(90deg);
+}

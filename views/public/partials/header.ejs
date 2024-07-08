@@ -1,0 +1,408 @@
+<!-- Navbar -->
+
+<!-- <nav
+class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+id="layout-navbar"
+>
+<div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+  <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+    <i class="bx bx-menu bx-sm"></i>
+  </a>
+</div>
+
+<div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+  
+  <div class="navbar-nav align-items-center">
+    <div class="nav-item d-flex align-items-center">
+        <form class="d-flex">
+            <div class="input-group">
+              <span class="input-group-text"><i class="tf-icons bx bx-search"></i></span>
+              <input type="text" class="form-control" placeholder="Search...">
+            </div>
+          </form>
+    </div>
+  </div>
+  
+  
+
+  <ul class="navbar-nav flex-row align-items-center ms-auto">
+    
+    <li>
+      <div class="demo-inline-spacing mb-3">
+        <div class="btn-group" id="dropdown-icon-demo">
+          <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bx bx-menu"></i> With Icon
+          </button>
+          <ul class="dropdown-menu" style="">
+            <li>
+              <a href="/upload" class="dropdown-item d-flex align-items-center"><i class="bx bx-chevron-right scaleX-n1-rtl"></i>Upload</a>
+            </li>
+              <hr class="dropdown-divider">
+            </li>
+            <li>
+              <a href="javascript:void(0);" class="dropdown-item d-flex align-items-center"><i class="bx bx-chevron-right scaleX-n1-rtl"></i>Separated link</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </li>
+
+    
+    <li class="nav-item navbar-dropdown dropdown-user dropdown">
+      <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+        <div class="avatar avatar-online">
+          <img src="/img/<%= user.avatar_url%>" alt class="w-px-40 h-auto rounded-circle" />
+        </div>
+      </a>
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li>
+          <a class="dropdown-item" href="#">
+            <div class="d-flex">
+              <div class="flex-shrink-0 me-3">
+                <div class="avatar avatar-online">
+                  <img src="/img/<%= user.avatar_url%>" alt class="w-px-40 h-auto rounded-circle" />
+                </div>
+              </div>
+              <div class="flex-grow-1">
+                <span class="fw-semibold d-block">John Doe</span>
+                <small class="text-muted">Admin</small>
+              </div>
+            </div>
+          </a>
+        </li>
+        <li>
+          <div class="dropdown-divider"></div>
+        </li>
+        <li>
+          <a class="dropdown-item" href="/account">
+            <i class="bx bx-user me-2"></i>
+            <span class="align-middle">My Profile</span>
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item" href="#">
+            <i class="bx bx-cog me-2"></i>
+            <span class="align-middle">Settings</span>
+          </a>
+        
+          <div class="dropdown-divider"></div>
+        </li>
+        <li>
+         
+          <form action="/logout" method="get">
+            <button class="btn " type="submit">
+              <i class="bx bx-power-off me-2"></i>
+              <span class="align-middle">Log Out</span>
+            </button>
+          </form>
+        </li>
+      </ul>
+    </li>
+    
+  </ul>
+</div>
+</nav> -->
+
+<nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme">
+  <div class="container-fluid">
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/home">Trang chủ</a>
+        </li>
+        
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="javascript:void(0)" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Danh mục
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown" id="list-types">
+            <!-- <li><a class="dropdown-item" href="javascript:void(0)">Action</a></li>
+            <li><a class="dropdown-item" href="javascript:void(0)">Another action</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li> -->
+            
+          </ul>
+        </li>
+       
+      </ul>
+      <div>
+        <div class="btn-group setting-area">
+          <a  class="noti" data-bs-toggle="dropdown" aria-expanded="false" style="margin: 0px; ">
+            <i class='bx bx-info-circle'></i>
+            <em class="bg-purple" id="num_notification_admin"></em>
+          </a>
+          <ul class="dropdown-menu" style="padding-right: 30px;" id="list_notification_admin" >
+            
+          </ul>
+        </div>
+        <div class="btn-group setting-area" style="margin-right: 0px;">
+          <a  class="noti" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bx bx-bell me-1"></i>
+            <em class="bg-purple" id="num_notification"></em>
+          </a>
+          <ul class="dropdown-menu" style="padding-right: 30px;" id="list_notification" >
+            
+          </ul>
+        </div>
+      </div>
+      
+      <div class="demo-inline-spacing mb-3" style="margin-right: 20px;">
+        <div class="btn-group" id="dropdown-icon-demo">
+          <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+           Đăng 
+          </button>
+          <ul class="dropdown-menu">
+            <li>
+              <a href="/upload" class="dropdown-item d-flex align-items-center"><i class="bx bx-chevron-right scaleX-n1-rtl"></i>Đăng tài liệu</a>
+            </li>
+              <hr class="dropdown-divider">
+            </li>
+            <li>
+              <a href="/uploadpost" class="dropdown-item d-flex align-items-center"><i class="bx bx-chevron-right scaleX-n1-rtl"></i>Đăng bài</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <form class="d-flex " style="margin-right: 10px;" onsubmit="return false">
+        <!-- <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"> -->
+        <a href="/search" class="btn rounded-pill btn-icon btn-outline-primary" type="submit">
+          <span class="tf-icons bx bx-search"></span>
+          
+        </a>
+      </form>
+      
+      <!-- <div class="setting-area">
+        <a  title="Notification" data-ripple="" class="noti dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="bx bx-bell me-1"></i>
+          <em class="bg-purple" id="num_notification"></em>
+        </a>
+      </div> -->
+      <!-- <button type="button" class="btn btn-primary btn-sm dropdown-toggle hide-arrow" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bx bx-bell me-1"></i>
+        <span class="badge rounded-pill badge-center h-px-20 w-px-20 bg-danger" id="num_notification"></span>
+      </button> -->
+      <!-- <ul class="dropdown-menu dropdown-menu-end" id="list_notification">
+        
+        
+      </ul> -->
+      
+      <input type="text" value="<%= user.id%>" id="userid" hidden>
+    </div>
+    <div class="nav-item navbar-dropdown dropdown-user dropdown align-items-center ms-auto">
+      <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+        <div class="avatar avatar-online">
+          <img src="/img/<%= user.avatar_url%>" alt class="w-px-40 h-auto rounded-circle" />
+        </div>
+      </a>
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li>
+          <a class="dropdown-item" href="#">
+            <div class="d-flex">
+              <div class="flex-shrink-0 me-3">
+                <div class="avatar avatar-online">
+                  <img src="/img/<%= user.avatar_url%>" alt class="w-px-40 h-auto rounded-circle" />
+                </div>
+              </div>
+              <div class="flex-grow-1">
+                <span class="fw-semibold d-block"><%= user.username  %></span>
+                <% if(user.role == 1){ %>
+                  <small class="text-muted">Khách</small>
+                <% } else{ %>
+                  <small class="text-muted">Admin</small>
+                <% } %>
+                
+              </div>
+            </div>
+          </a>
+        </li>
+        <li>
+          <div class="dropdown-divider"></div>
+        </li>
+        <li>
+          <a class="dropdown-item" href="/account">
+            <i class="bx bx-user me-2"></i>
+            <span class="align-middle">Thông tin cá nhân</span>
+          </a>
+        </li>
+        <li>
+          
+        
+          <div class="dropdown-divider" ></div>
+        </li>
+        <li>
+         
+          <form action="/logout"  method="get">
+            <button class="btn " type="submit" >
+              <i class="bx bx-power-off me-2"></i>
+              <span class="align-middle">Đăng xuất</span>
+            </button>
+          </form>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<!-- / Navbar -->
+<script>
+  function loadnoti(){
+    const user_id = document.getElementById("userid").value;
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8001/api/v1/notification/"+user_id,
+        
+        success: function (response) {
+            // Kiểm tra xem dữ liệu phản hồi có phải là null không
+            if (response.data !== null) {
+                let num = response.num;
+                let $str = response.data.map(function (noti) {
+                    return `<li class ="dropdown-item" >
+                    <div class="d-flex mb-2 ">
+                      <div class="flex-shrink-0 ">
+                        <img src="/img/${noti.avatar_url}" class="me-1" height="30">
+                      </div>
+                      <div class="flex-grow-1 row">
+                        <div class="col-md-8 mb-sm-0 d-flex">
+                          <a href = "${noti.link}" class="mb-0" onclick ="update_noti(${noti.id})">
+                             <p style="font-size: 12px;">${noti.content}</p>
+                          </a>
+                         
+                        </div>
+                        <small style="font-size: 12px;" class="text-muted">${countTime(noti.created_at)}</small>
+                        
+                      </div>
+                    </div>
+                  </li> 
+                  <hr class="m-0">
+                  `; 
+                })
+                $str += `<div class = "d-flex justify-content-center ">
+                  <a href = "/noti">Xem tất cả</a>
+                  </div>
+                `; 
+                $('#list_notification').html($str);
+                $('#num_notification').html(num);
+            }
+            if(response.num ==0){
+                $('#list_notification').html('<p class = "m-2">Không có thông báo mới</p>');
+            }
+            // else{
+                
+            //     $('#list_notification').html('<p>No notifications found</p>');
+            // }
+           
+        },
+        error: function (error) {
+            console.log(error);
+        },
+
+    });
+
+}
+function loadnotiAdmin(){
+  const user_id = document.getElementById("userid").value;
+  $.ajax({
+      type: "GET",
+      url: "http://localhost:8001/api/v1/noti/admin/"+user_id,
+      
+      success: function (response) {
+          // Kiểm tra xem dữ liệu phản hồi có phải là null không
+          if (response.data !== null) {
+              let num = response.num;
+              let $str = response.data.map(function (noti) {
+                  return `<li class ="dropdown-item">
+                    <div >
+                      <p style="font-size: 10px; margin-bottom: 0px; word-break: break-word;">${noti.content}</p>
+                      <small style="font-size: 12px;" class="text-muted">${countTime(noti.created_at)}</small>
+                    </div>
+                    
+                    
+                </li> 
+                <hr class="m-0">
+                `; 
+              })
+              
+              $('#list_notification_admin').html($str);
+              $('#num_notification_admin').html(num);
+          }
+          if(response.num ==0){
+              $('#list_notification_admin').html('<p class ="m-2">Không có thông báo mới từ admin</p>');
+          }
+          // else{
+              
+          //     $('#list_notification').html('<p>No notifications found</p>');
+          // }
+         
+      },
+      error: function (error) {
+          console.log(error);
+      },
+
+  });
+
+}
+function update_noti(id){
+
+    $.ajax({
+        url: `http://localhost:8001/api/v1/notification/update`,
+        method: "POST",
+        dataType: "json",
+        data: {id: id},
+        success: function(data) {
+          //alert(data.message);
+                          
+        },
+        error: function(err) {
+          alert(err.responseText);
+        }
+      });
+}
+function shortenTextByWords(text, maxWords) {
+  // Tách văn bản thành các từ dựa trên khoảng trắng
+  let words = text.split(/\s+/);
+  
+  // Nếu số từ ít hơn hoặc bằng số từ tối đa, trả về văn bản gốc
+  if (words.length <= maxWords) {
+    return text;
+  }
+
+  // Lấy 50 từ đầu tiên và thêm dấu ba chấm
+  let shortenedText = words.slice(0, maxWords).join(' ') + '...';
+
+  return shortenedText;
+}
+function countTime(created_at_string) {
+  let created_at = new Date(created_at_string);
+  let now = new Date();
+
+  let timeDifference = now - created_at; // Khoảng thời gian ở dạng miligisecond
+
+  let minutesDifference = Math.floor(timeDifference / (1000 * 60)); // Chuyển đổi sang phút
+  let hoursDifference = Math.floor(timeDifference / (1000 * 60 * 60)); // Chuyển đổi sang giờ
+  let daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24)); // Chuyển đổi sang ngày
+
+  let result;
+
+  if (daysDifference > 0) {
+      result = daysDifference + (daysDifference === 1 ? " ngày trước" : " ngày trước");
+  } else if (hoursDifference > 0) {
+      result = hoursDifference + (hoursDifference === 1 ? " giờ trước" : " giờ trước");
+  } else {
+      result = minutesDifference + (minutesDifference === 1 ? " phút trước" : " phút trước");
+  }
+
+  return result;
+}
+window.onload = function () {
+  let intervalId = setInterval(() => {
+    loadnoti();
+    loadnotiAdmin();
+  }, 1000);
+}
+//setTimeout(loadnoti, 1000);
+//loadnoti();
+</script>

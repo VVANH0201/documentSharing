@@ -1,0 +1,915 @@
+<%- include('partials/head.ejs') %>
+<!-- Layout wrapper -->
+<div  class=" container-xxl flex-grow-1 container-p-y">
+    
+        <%- include('partials/header.ejs') %>
+        <div class="content-wrapper">
+            <!-- Content -->
+            <div class="container-fluid flex-grow-1 ">
+              <div class="auto-scroll justify-content-center">
+                <p class="scroll "  id="user-post" style="margin: 10px 0px; font-size: 18px;">
+                   
+                </p>
+            </div>
+                <!-- <div class="slick align-items-center d-flex justify-content-center your-class " id="listtype1">
+                  
+              </div> -->
+              <div class="d-flex justify-content-between">
+                <div class="mt-5" style="margin-right: 20px;">
+                  <%- include('partials/sidebar.ejs') %>
+                </div>
+               
+                <div class="">
+                  <div class="card img-fluid mt-5">
+                    <img src="https://public.slidesharecdn.com/_next/static/media/latest.a41f5eb8.png?width=1600&fit=bounds" alt="">
+                  </div>
+                  
+                 
+                  <div class="divider text-start">
+                    <a href="/types">
+                      <h1 class="title1">Tài liệu mới nhất</h1>
+                    </a>
+                    
+                    
+                  </div>
+                  <div class="row mt-3" id="list_document">
+                  </div> 
+                  <div class="divider text-start mt-3">
+                    <a href="/types">
+                      <h1 class="title1">Tài liệu nổi bật</h1>
+                    </a>
+                  </div>
+                  <div class="row mt-3" id="list_document1">
+                  </div> 
+                  <div class="p-3">
+                  
+                    <div class="row ">
+                      
+                    <div class="col-lg-9 card" style="padding: 0px;margin: 0px; padding-bottom: 30px; ">
+                      <div >
+                        <h1 class="title1 ">Bài viết nổi bật</h1>
+                      </div>
+                      <div class="">
+                        <div class="row" style="padding: 0px;margin: 0px;" id="list_post"></div>
+                      </div>
+                        <!-- <section class="light">
+                            <div class="container py-2">
+                                
+                                <div id="list_post"></div>
+                                
+                            </div>
+                        </section> -->
+                       
+                    </div>
+                    
+                    <div class="col-lg-3 card" style="padding-left: 5px;padding-right: 0px; margin: 0px; padding-bottom: 30px;" >
+                      <h4 class="title1 ">Bài viết mới nhất</h4>
+                      <div id="list_post_time">
+                        
+                      </div>
+                      
+
+                      <!-- Tags -->
+                      <div class=" ">
+                       <h4 class="title1">Tag</h4>
+                       <hr class="m-0">
+                        <div id="list_tags" >
+                          
+                        </div>
+    
+                        
+                      </div>
+                      <!-- <div class="card" id="list_tags">
+
+                      </div> -->
+                    </div>
+                </div>
+                </div>
+                
+                
+                </div>
+              </div>
+              </div>
+             
+              
+                
+                
+                
+            </div>
+        </div>
+</div>
+<script src="/asset/js/script/index.js"></script>
+<style>
+  .auto-scroll{
+    width: 100%;
+    background-color: #484065;
+    ;
+    white-space: nowrap;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+  .scroll{
+    display: inline-block;
+    color: #FFF;
+    padding-left: 100%;
+    animation: move 25s linear infinite;
+  }
+  @keyframes move {
+    0%   { transform: translate(0, 0); }
+    100% { transform: translate(-100%, 0); }
+}
+</style>
+<%- include('partials/footer.ejs') %>
+
+<!-- <script>
+  function getData() {
+    var inputs = document.getElementsByClassName("num");
+    var inputValues = [];
+    console.log(inputs.length);
+
+    for (var i = 0; i < inputs.length; i++) {
+        inputValues.push(inputs[i].value);
+        loadtype(inputs[i].value);
+    }
+    
+    console.log(inputValues);
+}
+loadPostByView();
+
+
+function loadtypes(){
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8001/api/v1/types",
+        
+        success: function (response) {
+            // Kiểm tra xem dữ liệu phản hồi có phải là null không
+            if (response.data != null) {
+                let $str = response.data.map(function (types) {
+                    return `<a type="button" class="btn rounded-pill btn-sm btn-secondary m-3" href="/types/${types.id}">${types.name}</a> `; 
+                })
+                $('#listtype1').html($str);
+            }
+        },
+        error: function (error) {
+            console.log(error);
+        },
+
+    });
+    $(document).ready(function(){
+      $('.your-class').slick({
+        infinite: true,
+  slidesToShow: 5,
+  slidesToScroll: 5,
+  prevArrow: `<p class="page-item prev">
+                              <a class="page-link" href="javascript:void(0);"><i class="tf-icon bx bx-chevron-left"></i></a>
+                            </p>`,
+    nextArrow: `<p class="page-item next">
+                              <a class="page-link" href="javascript:void(0);"><i class="tf-icon bx bx-chevron-right"></i></a>
+                            </p>`
+      });
+    });
+
+}
+loadtypes();
+function handleViewDocument(id){
+  $.ajax({
+    url: `http://localhost:8001/api/v1/document/updateview`,
+    method: "POST",
+    dataType: "json",
+    data: {id: id},
+    success: function(data) {
+      //alert(data.message);
+                      
+    },
+    error: function(err) {
+      alert(err.responseText);
+    }
+  });
+  //alert(id);
+}
+function loadPostByView(){
+      $.ajax({
+        type: "GET",
+        url: "http://localhost:8001/api/v1/posts/get-by-view",
+
+        success: function (response) {
+            // Kiểm tra xem dữ liệu phản hồi có phải là null không
+            if (response.data != null) {
+                console.log(response.data);
+                let count = response.length;
+                for (const post of response.data) {
+                  let str = `
+                  <div class="col-xs-12 col-sm-4 col-lg-4" style="padding-bottom: 10px;">
+                        <div class="card">
+                            <a class="img-card" href="/post/${post.id}">
+                            <img src="/img/${post.images}" />
+                          </a>
+                            <div class="card-content">
+                                <h5 class="card-title">
+                                  <a style = "font-size:13px" href="/post/${post.id}" aria-label="${post.title}" data-cooltipz-dir="bottom"> ${shortenHtmlText(post.title,32)}
+                                  </a>
+                                </h5>
+                                <p style="margin-bottom: 0; font-size:12px;text-align: justify;" >
+                                  ${shortenHtmlText(post.body,80)}
+                                </p>
+                                <ul class="postcard__tagbox" style="margin: 0 5 0 0px;" id ="tags${post.id}">
+                                   
+                                  </ul>
+                                  <input type="text" value="${post.id}" class="num" name = "num" hidden >
+                            </div>
+                            
+                            
+                        </div>
+                    </div>
+                  
+                 
+                `;
+                $('#list_post').append(str);
+                }
+                getData();             
+            }
+            else{
+            }
+        },
+        error: function (error) {
+            console.log(error);
+        },
+    });
+}
+function loadPostByTime(){
+      $.ajax({
+        type: "GET",
+        url: "http://localhost:8001/api/v1/posts/get-by-time",
+
+        success: function (response) {
+            // Kiểm tra xem dữ liệu phản hồi có phải là null không
+            if (response.data != null) {
+                console.log(response.data);
+                let count = response.length;
+                for (const post of response.data) {
+                  let str = `
+                  <div class="col-md">
+                          <div class="card mb-3">
+                            <div class="row g-0">
+                              <div class="col-md-4">
+                                <a href = "/post/${post.id}"></a>
+                                <img class="card-img card-img-left" src="./img/${post.images}" alt="Card image">
+                              </div>
+                              <div class="col-md-8">
+                                <div class="p-2">
+                                  <a href = "/post/${post.id}">
+                                    <h5 aria-label="${post.title}" data-cooltipz-dir="bottom" class="card-title" style ="font-size: 14px;">${post.title}</h5>
+                                  </a>
+                                  <p class="" style = "margin-bottom:0px; font-size:12px;">
+                                    ${shortenHtmlText(post.body,50)} 
+                                  </p>
+                                  <a href = "/user/${post.user_id}">
+                                    <p class="card-text"><small class="text-muted">Người đăng ${post.full_name}</small></p>
+                                  </a>
+                                 
+                                  <p class="card-text"><small class="text-muted">${countTime(post.created_at)}</small></p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                `;
+                $('#list_post_time').append(str);
+                }
+                getData();             
+            }
+            else{
+            }
+        },
+        error: function (error) {
+            console.log(error);
+        },
+    });
+}
+loadPostByTime();
+// loadPostByView();
+</script> -->
+<style>
+  .img-card {
+  width: 100%;
+  height:200px;
+  border-top-left-radius:2px;
+  border-top-right-radius:2px;
+  display:block;
+    overflow: hidden;
+}
+.img-card img{
+  width: 100%;
+  height: 200px;
+  object-fit:cover; 
+  transition: all .25s ease;
+} 
+
+  .hover:hover{
+    transform: scale(0.9);
+  }
+  .title1{
+    font-size: 25px;
+    font-weight: 500;
+    padding: 15px;
+    /* width: 230px; */
+    background: #484065;
+    color: #FFF;
+    
+    overflow: hidden;
+  }
+  .card-content {
+  padding: 5px;
+  text-align:left;
+}
+.card-title {
+ 
+  margin-top:0px;
+  font-weight: 500;
+  font-size: 16px;
+}
+.card-title a {
+  color: #000;
+  text-decoration: none !important;
+}
+.card-read-more {
+  border-top: 1px solid #D4D4D4;
+}
+.card-read-more a {
+  text-decoration: none !important;
+  padding:10px;
+  font-weight:600;
+  text-transform: uppercase
+}
+  .img-fluid{
+    width: 100%;
+    height: auto;
+  }
+  .img-link{
+    position: relative;
+  overflow: hidden;
+  display: inline-block;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  }
+    /* Cards */
+.postcard {
+  flex-wrap: wrap;
+  display: flex;
+  box-shadow: 0 4px 21px -12px rgba(0, 0, 0, 0.66);
+  border-radius: 10px;
+  margin: 0 0 2rem 0;
+  overflow: hidden;
+  
+  position: relative;
+  color: #ffffff;
+}
+.postcard.dark {
+  background-color: #18151f;
+}
+.postcard.light {
+  background-color: #e1e5ea;
+}
+.postcard .t-dark {
+  color: #18151f;
+}
+.postcard a {
+  color: inherit;
+}
+.postcard h1,
+.postcard .h1 {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+ 
+}
+.postcard .small {
+  font-size: 80%;
+}
+.postcard .postcard__title {
+  font-size: 10px;
+}
+.postcard .postcard__img {
+  max-height: 180px;
+  width: 100%;
+  object-fit: cover;
+  position: relative;
+}
+.postcard .postcard__img_link {
+  display: contents;
+}
+.postcard .postcard__bar {
+  width: 50px;
+  height: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  background-color: #424242;
+  transition: width 0.2s ease;
+}
+.postcard .postcard__text {
+  padding: 1.5rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.postcard .postcard__preview-txt {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: justify;
+  height: 100%;
+}
+ .postcard__tagbox {
+  display: flex;
+  flex-flow: row wrap;
+  font-size: 14px;
+ 
+  padding: 0;
+  justify-content: center;
+}
+.postcard__tagbox .tag__item {
+  display: inline-block;
+  background: rgba(83, 83, 83, 0.4);
+  border-radius: 3px;
+  padding: 2.5px 2.5px;
+  margin: 0 5px 5px 0;
+  cursor: default;
+  
+  user-select: none;
+  transition: background-color 0.3s;
+}
+ .postcard__tagbox .tag__item:hover {
+  background: rgba(83, 83, 83, 0.8);
+}
+.postcard:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-image: linear-gradient(-70deg, #424242, transparent 50%);
+  opacity: 1;
+  border-radius: 10px;
+}
+.postcard:hover .postcard__bar {
+  width: 100px;
+}
+
+@media screen and (min-width: 769px) {
+  .postcard {
+    flex-wrap: inherit;
+  }
+  .postcard .postcard__title {
+    font-size: 2rem;
+  }
+   .postcard__tagbox {
+    justify-content: start;
+  }
+  .postcard .postcard__img {
+    max-width: 300px;
+    max-height: 100%;
+    transition: transform 0.3s ease;
+  }
+  .postcard .postcard__text {
+    padding: 3rem;
+    width: 100%;
+  }
+  .postcard .media.postcard__text:before {
+    content: "";
+    position: absolute;
+    display: block;
+    background: #18151f;
+    top: -20%;
+    height: 130%;
+    width: 55px;
+  }
+  .postcard:hover .postcard__img {
+    transform: scale(1.1);
+  }
+  .postcard:nth-child(2n+1) {
+    flex-direction: row;
+  }
+  .postcard:nth-child(2n+0) {
+    flex-direction: row-reverse;
+  }
+  .postcard:nth-child(2n+1) .postcard__text::before {
+    left: -12px !important;
+    transform: rotate(4deg);
+  }
+  .postcard:nth-child(2n+0) .postcard__text::before {
+    right: -12px !important;
+    transform: rotate(-4deg);
+  }
+}
+@media screen and (min-width: 1024px) {
+  .postcard__text {
+    padding: 2rem 3.5rem;
+  }
+
+  .postcard__text:before {
+    content: "";
+    position: absolute;
+    display: block;
+    top: -20%;
+    height: 130%;
+    width: 55px;
+  }
+
+  .postcard.dark .postcard__text:before {
+    background: #18151f;
+  }
+
+  .postcard.light .postcard__text:before {
+    background: #e1e5ea;
+  }
+}
+/* COLORS */
+ .postcard__tagbox .green.play:hover {
+  background: #79dd09;
+  color: black;
+}
+
+.green .postcard__title:hover {
+  color: #79dd09;
+}
+
+.green .postcard__bar {
+  background-color: #79dd09;
+}
+
+.green::before {
+  background-image: linear-gradient(-30deg, rgba(121, 221, 9, 0.1), transparent 50%);
+}
+
+.green:nth-child(2n)::before {
+  background-image: linear-gradient(30deg, rgba(121, 221, 9, 0.1), transparent 50%);
+}
+
+ .postcard__tagbox .blue.play:hover {
+  background: #0076bd;
+}
+
+.blue .postcard__title:hover {
+  color: #0076bd;
+}
+
+.blue .postcard__bar {
+  background-color: #0076bd;
+}
+
+.blue::before {
+  background-image: linear-gradient(-30deg, rgba(0, 118, 189, 0.1), transparent 50%);
+}
+
+.blue:nth-child(2n)::before {
+  background-image: linear-gradient(30deg, rgba(0, 118, 189, 0.1), transparent 50%);
+}
+
+ .postcard__tagbox .red.play:hover {
+  background: #bd150b;
+}
+
+.red .postcard__title:hover {
+  color: #bd150b;
+}
+
+.red .postcard__bar {
+  background-color: #bd150b;
+}
+
+.red::before {
+  background-image: linear-gradient(-30deg, rgba(189, 21, 11, 0.1), transparent 50%);
+}
+
+.red:nth-child(2n)::before {
+  background-image: linear-gradient(30deg, rgba(189, 21, 11, 0.1), transparent 50%);
+}
+
+ .postcard__tagbox .yellow.play:hover {
+  background: #bdbb49;
+  color: black;
+}
+
+.yellow .postcard__title:hover {
+  color: #bdbb49;
+}
+
+.yellow .postcard__bar {
+  background-color: #bdbb49;
+}
+
+.yellow::before {
+  background-image: linear-gradient(-30deg, rgba(189, 187, 73, 0.1), transparent 50%);
+}
+
+.yellow:nth-child(2n)::before {
+  background-image: linear-gradient(30deg, rgba(189, 187, 73, 0.1), transparent 50%);
+}
+
+@media screen and (min-width: 769px) {
+  .green::before {
+    background-image: linear-gradient(-80deg, rgba(121, 221, 9, 0.1), transparent 50%);
+  }
+
+  .green:nth-child(2n)::before {
+    background-image: linear-gradient(80deg, rgba(121, 221, 9, 0.1), transparent 50%);
+  }
+
+  .blue::before {
+    background-image: linear-gradient(-80deg, rgba(0, 118, 189, 0.1), transparent 50%);
+  }
+
+  .blue:nth-child(2n)::before {
+    background-image: linear-gradient(80deg, rgba(0, 118, 189, 0.1), transparent 50%);
+  }
+
+  .red::before {
+    background-image: linear-gradient(-80deg, rgba(189, 21, 11, 0.1), transparent 50%);
+  }
+
+  .red:nth-child(2n)::before {
+    background-image: linear-gradient(80deg, rgba(189, 21, 11, 0.1), transparent 50%);
+  }
+
+  .yellow::before {
+    background-image: linear-gradient(-80deg, rgba(189, 187, 73, 0.1), transparent 50%);
+  }
+
+  .yellow:nth-child(2n)::before {
+    background-image: linear-gradient(80deg, rgba(189, 187, 73, 0.1), transparent 50%);
+  }
+}
+</style>
+<!-- <script>
+  function loadDocumentByTime(){
+      $.ajax({
+        type: "GET",
+        url: "http://localhost:8001/api/v1/documents/getbytime",
+
+        success: function (response) {
+            // Kiểm tra xem dữ liệu phản hồi có phải là null không
+            if (response.data != null) {
+                console.log(response.data);
+                let count = response.length;
+                for (const document of response.data) {
+                  let str = `
+                  <div class="col-md-4 col-lg-3 mb-3" >
+                    <input type="text" value="${document.link}" hidden class="link_file">
+                    
+
+                        <div class="card bg-white border-white border-0">
+                          <a aria-label="${document.title}" data-cooltipz-dir="bottom" href="/document/view/${document.id}" onclick = "handleViewDocument(${document.id})">
+                            <div class = "d-flex justify-content-center">
+                              <img class="card-custom-img" id="pdfImage1${document.id}" alt="PDF to Image">
+                              
+                            </div>
+                            <div  class="title">
+                              <div class="d-flex align-items-center justify-content-between">
+                                <span  class ="text_size">${shortenTextByWords(document.title,10)}</span>
+                              </div> 
+                            
+                           
+                          </div>
+                          </a>
+                          <div class="" style="background: inherit; border-color: inherit;">
+                            <div class="d-flex align-items-center m-2" >
+                                <div class="d-flex align-items-center" style = "margin-right:10px">
+                                    <i class='bx bx-heart'></i>
+                                    <div class="text-muted">${document.like_count}</div>
+                                </div>
+                                <div class="d-flex align-items-center" style = "margin-right:10px">
+                                  <i class='bx bx-memory-card'></i>
+                                  <div class="text-muted"> ${document.file_type}</div>
+                                </div>
+                                <div class="d-flex align-items-center" style = "margin-right:10px">
+                                    <i class='bx bxs-download' ></i>
+                                    <div class="text-muted">${document.download_count}</div>
+                                </div> 
+                                <div class="d-flex align-items-center" style = "margin-right:10px">
+                                    <i class='bx bx-show'></i>
+                                    <div class="text-muted">${document.view_count}</div>
+                                </div>
+                                
+                            </div>
+                          </div>
+                            
+                            
+                            
+                                
+                            
+                        </div>
+                          
+                        
+                    </div>
+                `;
+                $('#list_document').append(str);
+                } 
+                for (const document of response.data) {
+                  displayFirstPage(document.link, "pdfImage1"+document.id);
+                }               
+            }
+            else{
+            }
+        },
+        error: function (error) {
+            console.log(error);
+        },
+    });
+}
+loadDocumentByTime();
+function loadDocumentByView(){
+      $.ajax({
+        type: "GET",
+        url: "http://localhost:8001/api/v1/documents/getbyview",
+
+        success: function (response) {
+            // Kiểm tra xem dữ liệu phản hồi có phải là null không
+            if (response.data != null) {
+                console.log(response.data);
+                
+                for (const document of response.data) {
+                  let str = `
+                  <div class="col-md-4 col-lg-3 mb-3" >
+                   
+                    
+
+                        <div class="card bg-white border-white border-0">
+                          <a aria-label="${document.title}" data-cooltipz-dir="bottom" href="/document/view/${document.id}" onclick = "handleViewDocument(${document.id})">
+                            <div class = "d-flex justify-content-center">
+                              <img class="card-custom-img" id="pdfImage${document.id}" alt="PDF to Image">
+                              
+                            </div>
+                            <div class="title">
+                              <div class="d-flex align-items-center justify-content-between">
+                                <span class ="text_size">${shortenTextByWords(document.title,10)}</span>
+                              </div> 
+                            
+                           
+                          </div>
+                          </a>
+                          <div class="" style="background: inherit; border-color: inherit;">
+                            <div class="d-flex align-items-center m-2" >
+                                <div class="d-flex align-items-center" style = "margin-right:10px">
+                                    <i class='bx bx-heart'></i>
+                                    <div class="text-muted">${document.like_count}</div>
+                                </div>
+                                <div class="d-flex align-items-center" style = "margin-right:10px">
+                                  <i class='bx bx-memory-card'></i>
+                                  <div class="text-muted"> ${document.file_type}</div>
+                                </div>
+                                <div class="d-flex align-items-center" style = "margin-right:10px">
+                                    <i class='bx bxs-download' ></i>
+                                    <div class="text-muted">${document.download_count}</div>
+                                </div> 
+                                <div class="d-flex align-items-center" style = "margin-right:10px">
+                                    <i class='bx bx-show'></i>
+                                    <div class="text-muted">${document.view_count}</div>
+                                </div>
+                                
+                            </div>
+                          </div>
+                            
+                            
+                            
+                                
+                            
+                        </div>
+                          
+                        
+                    </div>
+                `;
+                $('#list_document1').append(str);
+                }   
+                for (const document of response.data) {
+                  displayFirstPage(document.link, "pdfImage"+document.id);
+                }          
+            }
+            else{
+            }
+        },
+        error: function (error) {
+            console.log(error);
+        },
+    });
+}
+loadDocumentByView();
+function shortenHtmlText(htmlText, maxLength) {
+  let tempElement = document.createElement('div');
+  tempElement.innerHTML = htmlText;
+
+  let text = tempElement.textContent || tempElement.innerText || '';
+
+  if (text.length <= maxLength) {
+    return htmlText;
+  } else {
+    let shortText = text.substring(0, maxLength - 3) + "...";
+    tempElement.textContent = shortText;
+    return tempElement.innerHTML;
+  }
+}
+function shortenTextByWords(text, maxWords) {
+  // Tách văn bản thành các từ dựa trên khoảng trắng
+  let words = text.split(/\s+/);
+  
+  // Nếu số từ ít hơn hoặc bằng số từ tối đa, trả về văn bản gốc
+  if (words.length <= maxWords) {
+    return text;
+  }
+
+  // Lấy 50 từ đầu tiên và thêm dấu ba chấm
+  let shortenedText = words.slice(0, maxWords).join(' ') + '...';
+
+  return shortenedText;
+}
+function loadtype(id){
+    //const list = document.getElementsByClassName("${id}")
+    $.ajax({
+        type: "GET",
+        url: "http://localhost:8001/api/v1/post/tag/"+id,
+        
+        success: function (response) {
+          console.log("sss");
+            // Kiểm tra xem dữ liệu phản hồi có phải là null không
+            let $str = response.data.map(function (type) {
+                    return `
+                    
+                    <li class="tag__item">
+                      <a href = "/tag/${type.tag_id}">
+                        ${type.name_tag}
+                      </a>
+                      
+                    </li>
+                `;
+                });
+            
+              $("#tags" + id).html($str);
+              //console.log(str);
+        },
+        error: function (error) {
+            console.log(error);
+        },
+
+    });
+}
+function displayFirstPage(pdfFilePath, imgId) {
+  const pdfUrl = 'http://localhost:8001/img/' + pdfFilePath;
+            const img = document.getElementById(imgId);
+
+            // Khởi tạo PDFJS
+            pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
+                // Lấy trang đầu tiên
+                pdf.getPage(1).then(page => {
+                    const scale = 1.5;
+                    const viewport = page.getViewport({ scale });
+
+                    // Tạo canvas để vẽ trang PDF
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                   
+
+                    // Vẽ trang PDF lên canvas
+                    page.render({
+                        canvasContext: context,
+                        viewport: viewport
+                    }).promise.then(() => {
+                        // Chuyển đổi canvas thành ảnh và hiển thị trong thẻ img
+                        const imgData = canvas.toDataURL('image/jpeg');
+                        
+                          img.src = imgData;
+                        
+                       
+                          
+                        
+                        
+                    });
+                });
+            }).catch(error => {
+              img.src = "http://localhost:8001/asset/img/document.jpg";
+});
+}
+function countTime(created_at_string) {
+    let created_at = new Date(created_at_string);
+    let now = new Date();
+
+    let timeDifference = now - created_at; // Khoảng thời gian ở dạng miligisecond
+
+    let minutesDifference = Math.floor(timeDifference / (1000 * 60)); // Chuyển đổi sang phút
+    let hoursDifference = Math.floor(timeDifference / (1000 * 60 * 60)); // Chuyển đổi sang giờ
+    let daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24)); // Chuyển đổi sang ngày
+
+    let result;
+
+    if (daysDifference > 0) {
+        result = daysDifference + (daysDifference === 1 ? " ngày trước" : " ngày trước");
+    } else if (hoursDifference > 0) {
+        result = hoursDifference + (hoursDifference === 1 ? " giờ trước" : " giờ trước");
+    } else {
+        result = minutesDifference + (minutesDifference === 1 ? " phút trước" : " phút trước");
+    }
+
+    return result;
+}
+</script> -->

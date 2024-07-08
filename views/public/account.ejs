@@ -1,0 +1,758 @@
+
+<%- include('partials/head.ejs') %>
+<!-- Layout wrapper -->
+<div class="container-fluid">
+    <%- include('partials/header.ejs') %>
+    <div class="content-wrapper">
+            <!-- Content -->
+        <div class="container-xxl flex-grow-1 container-p-y">
+                <div class="row">
+                    <div class="col-xl-12">
+                      <div class="nav-align-top mb-4">
+                        <ul class="nav nav-pills mb-3" role="tablist">
+                          <li class="nav-item">
+                            <button
+                              type="button"
+                              class="nav-link active"
+                              role="tab"
+                              data-bs-toggle="tab"
+                              data-bs-target="#navs-pills-top-home"
+                              aria-controls="navs-pills-top-home"
+                              aria-selected="true"
+                            >
+                              Thông tin cá nhân
+                            </button>
+                          </li>
+                          <li class="nav-item">
+                            <a
+                              type="button"
+                              class="nav-link"
+                              href="/mydocument"
+                            
+                            >
+                              Tài liệu của tôi
+                            </a>
+                          </li>
+                          <li class="nav-item">
+                            <a
+                              type="button"
+                              class="nav-link"
+                              href="/mypost"
+                            
+                            >
+                              Bài viết của tôi
+                            </a>
+                          </li>
+                          <li class="nav-item">
+                            <a
+                              type="button"
+                              class="nav-link"
+                              href="/friend"
+                            
+                            >
+                              Người theo dõi
+                            </a>
+                          </li>
+
+                        </ul>
+                       
+                        <div class="tab-content">
+                          <div class="tab-pane fade show active" id="navs-pills-top-home" role="tabpanel">
+                            <div class="row">
+                                <div class="col-md-12">
+                                  <div class="card mb-4">
+                                    <div class="d-flex justify-content-between">
+                                      <h5 class="card-header">Thông tin chi tiết</h5>
+                                      <h5 class="card-header"> Ngày lập: <%= moment(user.created_at).format('DD/MM/YYYY'); %></h5>
+                                    </div>
+                                    
+                              
+                                    <!-- Account -->
+                                    <div class="card-body">
+                                      <div class="d-flex align-items-start ">
+                                        <form action="/add" enctype="multipart/form-data" method="POST">
+                                          <img
+                                              src="/img/<%= user.avatar_url%>"
+                                              alt="user-avatar"
+                                              class="d-block rounded"
+                                              height="100"
+                                              width="100"
+                                              id="uploadedAvatar"
+                                              
+                                              />
+                                              <div class="button-wrapper mt-4">
+                                                <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
+                                                  <span class="d-none d-sm-block">Chọn ảnh mới</span>
+                                                  <i class="bx bx-upload d-block d-sm-none"></i>
+                                                  <input
+                                                    type="file"
+                                                    id="upload"
+                                                    class="account-file-input"
+                                                    
+                                                    hidden
+                                                    name="file"
+                                                    accept="image/png, image/jpeg" required
+                                                  />
+                                                </label>
+                                                <button type="button" class="btn btn-outline-primary account-image-reset mb-4">
+                                                  <i class="bx bx-reset d-block d-sm-none"></i>
+                                                  <span class="d-none d-sm-block">
+                                                    Làm mới
+                                                  </span>
+                                                </button>
+                                            <input  type="text" value="<%= user.id  %>" name="user_id" hidden>
+                                            <input class="btn btn-outline-primary  mb-4" type="submit" value="Upload a file"/>
+                                              </div>
+                                              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#basicModal">
+                                                Đổi mật khẩu
+                                               </button>
+                                          
+                                              
+                                          
+                                        </form>
+                                        <div style="margin-left: 20px;">
+                                          <li class="d-flex mb-4 pb-1">
+                               
+                                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                              <div class="me-2">
+                                                <a href="/friend">
+                                                  <h6 class="mb-0">Số người đang theo dõi</h6>
+                                                </a>
+                                                
+                                              </div>
+                                              <div class="user-progress d-flex align-items-center gap-1">
+                                                <h6 class="mb-0" id="following"></h6>
+                                               
+                                              </div>
+                                            </div>
+                                          </li>
+                                          <li class="d-flex mb-4 pb-1">
+                               
+                                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                              <div class="me-2">
+                                                
+                                                <h6 class="mb-0">Số người theo dõi</h6>
+                                              </div>
+                                              <div class="user-progress d-flex align-items-center gap-1">
+                                                <h6 class="mb-0" id="followed"></h6>
+                                               
+                                              </div>
+                                            </div>
+                                          </li>
+                                          <li class="d-flex mb-4 pb-1">
+                               
+                                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                              <div class="me-2">
+                                                <a href="/mypost" style="cursor: pointer;">
+                                                  <h6 class="mb-0">Tổng số bài viết</h6>
+                                                </a>
+                                               
+                                              </div>
+                                              <div class="user-progress d-flex align-items-center gap-1">
+                                                <h6 class="mb-0" id="postnum"></h6>
+                                               
+                                              </div>
+                                            </div>
+                                          </li>
+                                          <li class="d-flex mb-4 pb-1">
+                               
+                                            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+                                              <div class="me-2">
+                                                <a href="/mydocument" style="cursor: pointer;">
+                                                  <h6 class="mb-0">Tổng số tài liệu</h6>
+                                                </a>
+                                               
+                                              </div>
+                                              <div class="user-progress d-flex align-items-center gap-1">
+                                                <h6 class="mb-0" id="documentnum"></h6>
+                                               
+                                              </div>
+                                            </div>
+                                          </li>
+                                        </div>
+                                        <div class="col-md-6" style="margin-left: 20px;">
+                                         
+                                          <canvas id="myChart1">
+                                            
+                                          </canvas>
+                                        </div>
+                                        
+                                      </div>
+                                    </div>
+                                    <hr class="my-0" />
+                                    <div class="card-body">
+                                      <form action="/updateuser" method="POST" >
+                                        <div class="row">
+                                          <input type="text" value="<%= user.id %>" hidden id="user_id1">
+                                          <div class="mb-3 col-md-6">
+                                            <label for="fullname" class="form-label">Họ và tên:</label>
+                                            <input
+                                              class="form-control"
+                                              type="text"
+                                              id="fullnanme"
+                                              name="fullname"
+                                              value="<%= user.full_name %>" 
+                                              disabled="true"
+                                            />
+                                          </div>
+                                        
+                                          <div class="mb-3 col-md-6">
+                                            <label for="email" class="form-label">E-mail</label>
+                                            <input
+                                              class="form-control"
+                                              type="text"
+                                              id="email"
+                                              name="email"
+                                              value="<%= user.email %>"
+                                              disabled="true"
+                                              
+                                            />
+                                          </div>
+                                          <div class="mb-3 col-md-6">
+                                            <label for="email" class="form-label">Biệt danh</label>
+                                            <input
+                                              class="form-control"
+                                              type="text"
+                                              id="username"
+                                              name="username"
+                                              value="<%= user.username %>"
+                                              disabled="true"
+                                              
+                                            />
+                                          </div>
+                                          <div class="mb-3 col-md-6">
+                                            <label for="email" class="form-label">Số điện thoại</label>
+                                            <input
+                                              class="form-control"
+                                              type="text"
+                                              id="phone_number"
+                                              name="phone_number"
+                                              value="<%= user.phone_number %>"
+                                              disabled="true"
+                                              
+                                            />
+                                          </div>
+
+                                          <div class="mb-3 col-md-6">
+                                            <label for="email" class="form-label">Địa chỉ</label>
+                                            <input
+                                              class="form-control"
+                                              type="text"
+                                              id="address"
+                                              name="address"
+                                              value="<%= user.address %>"
+                                              disabled="true"
+                                              
+                                            />
+                                          </div>
+                                          
+                                        </div>
+                                        <div class="mt-2">
+                                          <button id="change" type="button" class="btn btn-primary me-2">Cập nhật</button>
+                                          <button id="save" type="submit" class="btn btn-primary me-2" hidden>Xác nhận</button>
+                                          <button type="reset" class="btn btn-outline-secondary">Hủy</button>
+                                        </div>
+                                      </form>
+                                    </div>
+                                    <!-- /Account -->
+                                  </div>
+                                  <!-- <div class="card">
+                                    <h5 class="card-header">Delete Account</h5>
+                                    <div class="card-body">
+                                      <div class="mb-3 col-12 mb-0">
+                                        <div class="alert alert-warning">
+                                          <h6 class="alert-heading fw-bold mb-1">Are you sure you want to delete your account?</h6>
+                                          <p class="mb-0">Once you delete your account, there is no going back. Please be certain.</p>
+                                        </div>
+                                      </div>
+                                      <form id="formAccountDeactivation" onsubmit="return false">
+                                        <div class="form-check mb-3">
+                                          <input
+                                            class="form-check-input"
+                                            type="checkbox"
+                                            name="accountActivation"
+                                            id="accountActivation"
+                                          />
+                                          <label class="form-check-label" for="accountActivation"
+                                            >I confirm my account deactivation</label
+                                          >
+                                        </div>
+                                        <button type="submit" class="btn btn-danger deactivate-account">Deactivate Account</button>
+                                      </form>
+                                    </div>
+                                  </div> -->
+                                </div>
+                            </div> 
+                          </div>
+                          <div class="tab-pane fade" id="navs-pills-top-profile" role="tabpanel">
+                            <table class="table table-striped table-sm" id="usersTable">
+                
+                              <thead>
+                                <tr>
+                                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
+                                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Tên tài liệu</th>
+                                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">link</th>
+                                  
+                                </tr>
+                              </thead>
+                          
+                              <tbody>
+                                <% document.forEach(entry => { %>
+                                  <tr>
+                                    <td class="text-secondary text-xs font-weight-bold ">
+                                      <div class="text-center">
+                                        <%= entry.id %>
+                                      </div>
+                                    </td>
+                                    <td class="text-secondary text-xs font-weight-bold ">
+                                      <div class="text-center">
+                                        <%= entry.title %>
+                                      </div>
+                                    </td>
+                                    <td class="text-secondary text-xs font-weight-bold ">
+                                      <div class="text-center">
+                                       <a href="/img/<%= entry.link %>" download  onclick="handleDownload(('<%= entry.id %>'))"> Tải xuống</a>
+                                      </div>
+                                    </td>
+                                    <td class="text-secondary text-xs font-weight-bold ">
+                                      <div class="text-center">
+                                       <a href="/document/view/<%= entry.id %>" onclick="handleView(('<%= entry.id %>'))"
+                                        >View</a>
+                                      </div>
+                                    </td>
+                                    
+                                  </tr>
+                                 
+                              <% }) %>
+                              </tbody>
+                            </table>
+                            
+                          </div>
+                          <div class="tab-pane fade" id="navs-pills-top-messages" role="tabpanel">
+                            <table class="table table-striped table-sm" id="usersTable">
+                
+                              <thead>
+                                <tr>
+                                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
+                                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Tên bai viet</th>
+                                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">link</th>
+                                  
+                                </tr>
+                              </thead>
+                          
+                              <tbody>
+                                <% post.forEach(entry => { %>
+                                  <tr>
+                                    <td class="text-secondary text-xs font-weight-bold ">
+                                      <div class="text-center">
+                                        <%= entry.id %>
+                                      </div>
+                                    </td>
+                                    <td class="text-secondary text-xs font-weight-bold ">
+                                      <div class="text-center">
+                                        <%= entry.title %>
+                                      </div>
+                                    </td>
+                                    
+                                    <td class="text-secondary text-xs font-weight-bold ">
+                                      <div class="text-center">
+                                       <a href="/post/<%= entry.id %>"
+                                        >View</a>
+                                      </div>
+                                    </td>
+                                    
+                                  </tr>
+                                 
+                              <% }) %>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="mt-3">
+                      <!-- Button trigger modal -->
+
+                      
+
+                      <!-- Modal -->
+                      <div class="modal fade" id="basicModal" tabindex="-1" style="display: none;" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                          <form action="">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel1">Đổi mật khẩu</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                <div class="row">
+                                  <div class="col mb-3">
+                                    <label for="oldpassword" class="form-label">Mật khẩu cũ</label>
+                                    <input type="password" id="oldpassword" class="form-control" placeholder="" >
+                                    
+                                  </div>
+                                </div>
+                                <div class="row">
+                                  <div class="col mb-3">
+                                    <label for="newpassword" class="form-label">Mật khẩu mới</label>
+                                    <input type="password" id="newpassword" class="form-control" placeholder="" >
+                                    <small class="form-text invalid-feedback">Invalid password, require greater than 2
+                                      letters</small>
+                                  </div>
+                                  
+                                </div>
+                                <div class="row">
+                                  <div class="col mb-3">
+                                    <label for="password" class="form-label">Nhập lại mật khẩu</label>
+                                    <input type="password" id="password" class="form-control" placeholder="" >
+                                    <small class="form-text invalid-feedback">Password confirmation is not match with the
+                                      password input</small>
+                                  </div>
+                                  
+                                </div>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                                  Đóng
+                                </button>
+                                <button type="button" class="btn btn-primary" id="changepass" >Lưu</button>
+                              </div>
+                            </div>
+                          </form>
+                          
+                        </div>
+                      </div>
+                    </div>
+            </div>
+            
+            <!-- / Content -->
+        </div>
+        
+    </div> 
+</div>      
+<%- include('partials/footer.ejs') %>
+<script>
+  function test(){
+    $.toast({
+            heading: 'Must not be resisted Password',
+            text: 'Must not be resisted Password',
+            showHideTransition: 'fade',
+            icon: 'error',
+            hideAfter: 1000,
+            loaderBg: '#fa6342',
+            position: 'bottom-right',
+        });
+  }
+  function validateInput(password, passwordConfirmation) {
+      //check password
+      if(password.length > 2){
+          $("#newpassword").removeClass("is-invalid");
+      }else {
+          $("#newpassword").addClass("is-invalid");
+      }
+  
+      //check passwordConfirmation
+      if(passwordConfirmation === password){
+          $("#password").removeClass("is-invalid");
+      }else{
+          $("#password").addClass("is-invalid");
+      }
+  
+      if(password.length <= 2 || password !== passwordConfirmation)
+          return true; //has errors
+  
+      return false;
+  }
+  function handleClickChangePassBtn() {
+      $("#changepass").on("click", function(event) {
+          event.preventDefault();
+          //alert(window.location.href);
+          let oldpass = $("#oldpassword").val();
+          let newpassword = $("#newpassword").val();
+          let passwordConfirmation = $("#password").val();
+          //let full_name = $("#full_name").val();
+  
+          //validate input
+          let check = validateInput(newpassword, passwordConfirmation);
+  
+          if (!check) {
+              alert("ok");
+              //send data to node server with ajax
+              //url map to http://localhost/register-new-user
+              $.ajax({
+                  url: `http://localhost:8001/api/v1/resetpass`,
+                  method: "POST",
+                  dataType: "json",
+                  data: {oldpass: oldpass, newpass: newpassword},
+                  success: function(data) {
+                      console.log(data);
+                      console.log(data.check);
+                      if(data.check === 1){
+                          alert("Change Pass done! Mời bạn đăng nhập lại hệ thống");
+                          window.location.href = "/login";
+                      }
+                      else{
+                          alert(data.message);
+                      }
+                      
+                  },
+                  error: function(err) {
+                     alert(err.responseText);
+                  }
+              });
+          }
+      });
+  }
+  $(document).ready(function() {
+    handleClickChangePassBtn();
+  });
+  </script>
+<!-- <script>
+  function handleLoginBtn(){
+    $("#loginBtn").on("click", function(event) {
+        event.preventDefault();
+        let user_id = $("#user_id").val();
+        let avatar_url = $("#upload").filename;
+        //let password = $("#password").val();
+        console.log(avatar_url);
+        console.log(user_id);
+        $.ajax({
+            url: `http://localhost:8001/api/v1/changefile`,
+            method: "POST",
+            data: {avatar_url: avatar_url},
+            success: function(data) {
+               console.log(data);
+               //alert("of");
+                //window.location.href = "/";
+            },
+            error: function(err) {
+                alert("Your email or password entered is incorrect. Please try again!");
+            }
+        })
+    });
+}
+$(document).ready(function() {
+    handleLoginBtn();
+});
+</script> -->
+<script>
+//   function handlechange(){
+//     $("#change").on("click", function(event) {
+//         event.preventDefault();
+//         const buttonChange = document.querySelector('#change'),
+//               buttonSave = document.querySelector('#save'),
+//               inputName = document.querySelector('#fullnanme'),
+//               inputusername = document.querySelector('#username'),
+//               inputaddress = document.querySelector('#address'),
+//               inputphone = document.querySelector('#phone_number');
+//         inputName.disabled  = false;
+//         inputusername.disabled  = false;
+//         inputName.disabled  = false;
+//         inputaddress.disabled  = false;
+//         inputphone.disabled  = false;
+//         inputName.focus();      
+//         buttonSave.hidden = false;
+//         buttonChange.hidden = true;
+//     });
+// }
+// function handleView(id){
+//   $.ajax({
+//     url: `http://localhost:8001/api/v1/document/updateview`,
+//     method: "POST",
+//     dataType: "json",
+//     data: {id: id},
+//     success: function(data) {
+//       alert(data.message);
+                      
+//     },
+//     error: function(err) {
+//       alert(err.responseText);
+//     }
+//   });
+//   //alert(id);
+// }
+// function handleDownload(id){
+//   $.ajax({
+//     url: `http://localhost:8001/api/v1/document/updatedownloadview`,
+//     method: "POST",
+//     dataType: "json",
+//     data: {id: id},
+//     success: function(data) {
+//       alert(data.message);
+                      
+//     },
+//     error: function(err) {
+//       alert(err.responseText);
+//     }
+//   });
+//   //alert(id);
+// }
+// // function handlesave(){
+// //     $("#save").on("click", function(event) {
+// //         event.preventDefault();
+// //         const buttonChange = document.querySelector('#change'),
+// //               buttonSave = document.querySelector('#save'),
+// //               inputName = document.querySelector('#fullnanme');
+// //         inputName.disabled  = true;      
+// //         buttonSave.hidden = true;
+// //         buttonChange.hidden = false;
+// //     });
+// // }
+// $(document).ready(function() {
+//   handlechange();
+//   //handlesave();
+// });
+// function changeDate(dateString){
+//   var date = new Date(dateString);
+
+//   // Lấy ngày, tháng, năm từ đối tượng Date
+//   var day = date.getDate();
+//   var month = date.getMonth() + 1; // Tháng bắt đầu từ 0 nên cần cộng thêm 1
+//   var year = date.getFullYear();
+
+//   // Tạo chuỗi ngày tháng năm
+//   var formattedDate = day + "/" + month + "/" + year;
+//   return formattedDate;
+// }
+
+// function loadfollowing(){
+//     const id = document.getElementById('user_id1').value;
+//     $.ajax({
+//         type: "GET",
+//         url: "http://localhost:8001/api/v1/user/following/"+id,
+        
+//         success: function (response) {
+//             // Kiểm tra xem dữ liệu phản hồi có phải là null không
+//             // 
+//             let num = response.num;
+//             $('#following').append(num);
+//         },
+//         error: function (error) {
+//             console.log(error);
+//         },
+
+//     });
+//   }
+//   function loadfollowed(){
+//     const id = document.getElementById('user_id1').value;
+//     $.ajax({
+//         type: "GET",
+//         url: "http://localhost:8001/api/v1/user/followed/"+id,
+        
+//         success: function (response) {
+//             // Kiểm tra xem dữ liệu phản hồi có phải là null không
+//             // 
+//             let num = response.num;
+//             $('#followed').append(num);
+//         },
+//         error: function (error) {
+//             console.log(error);
+//         },
+
+//     });
+//   }
+//   function loadNumberOfPost(){
+//     const id = document.getElementById('user_id1').value;
+//     $.ajax({
+//         type: "GET",
+//         url: "http://localhost:8001/api/v1/post/get-by-user/"+id,
+        
+//         success: function (response) {
+//             // Kiểm tra xem dữ liệu phản hồi có phải là null không
+//             // 
+//             let num = response.data;
+//             $('#postnum').append(num);
+//         },
+//         error: function (error) {
+//             console.log(error);
+//         },
+
+//     });
+//   }
+//   function loadNumberOfDocument(){
+//     const id = document.getElementById('user_id1').value;
+//     $.ajax({
+//         type: "GET",
+//         url: "http://localhost:8001/api/v1/document/get-by-user/"+id,
+        
+//         success: function (response) {
+//             // Kiểm tra xem dữ liệu phản hồi có phải là null không
+//             // 
+//             let num = response.data;
+//             $('#documentnum').append(num);
+//         },
+//         error: function (error) {
+//             console.log(error);
+//         },
+
+//     });
+//   }
+//   loadfollowing();
+//   loadfollowed();
+//   loadNumberOfDocument();
+//   loadNumberOfPost();
+//   function loadDataFromstatisticsByTypes(){
+//     const id = document.getElementById('user_id1').value;
+//     $.ajax({
+//         type: "POST",
+//         url: `http://localhost:8001/api/v1/types/statistic-by-user` ,
+//         headers: {
+//             "Content-Type": "application/json"
+//         },
+//         data: JSON.stringify({
+//           id: id,
+//         }),
+//         success: function (response) {
+           
+//             // Kiểm tra xem dữ liệu phản hồi có phải là null không
+//           console.log(response.message);
+//           console.log(response.data);
+//           const type_group = [];
+//           const barColors = [
+//             "#b91d47",
+//             "#00aba9",
+//             "#2b5797",
+//             "#e8c3b9"
+            
+//           ];
+//           // Mảng lưu trữ tổng số bài viết của mỗi nhóm
+//           const total_documents = [];
+
+//           // Lặp qua mỗi đối tượng trong dữ liệu API
+//           response.data.forEach(item => {
+//               type_group.push(item.type_group);
+//               total_documents.push(parseInt(item.total_documents)); // Chuyển đổi sang số nguyên
+//           });
+//           console.log(type_group);
+//           console.log(total_documents);
+//           new Chart("myChart1", {
+//             type: "pie",
+//             data: {
+//               labels: type_group,
+//               datasets: [{
+//                 backgroundColor: barColors,
+//                 data: total_documents
+//               }]
+//             },
+//             options: {
+//               title: {
+//                 display: true,
+//                 text: "Thống kê tài liệu đăng theo danh mục"
+//               }
+//             }
+//           });
+
+           
+//         },
+//         error: function (error) {
+//             console.log(error);
+           
+//         },
+//     });
+//   }
+//   loadDataFromstatisticsByTypes();
+</script>
+<script src="/asset/js/script/account.js"></script>
+<script
+src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+</script>
